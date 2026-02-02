@@ -1,0 +1,96 @@
+---
+layout: base.njk
+pagination:
+  data: collections
+  size: 1
+  alias: tag
+  filter:
+    - all
+    - posts
+    - tagList
+permalink: /tags/{{ tag | slugify }}/
+eleventyComputed:
+  title: "Tagged: {{ tag }}"
+---
+
+{% block extra_styles %}
+.page-header {
+    padding: 10rem 2rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+.page-description {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.tag-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+    margin-top: 2rem;
+}
+
+.back-link:hover {
+    color: var(--text-primary);
+}
+
+.back-link::before {
+    content: "← ";
+}
+{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <span class="tag-label">{{ tag }}</span>
+    <h1 class="page-title">Essays tagged "{{ tag }}"</h1>
+    <p class="page-description">{{ collections[tag].length }} essay{% if collections[tag].length != 1 %}s{% endif %}</p>
+</header>
+
+<section>
+    <div class="essays-list">
+        {% for post in collections[tag] | reverse %}
+        <a href="{{ post.url }}" class="essay-item">
+            <div>
+                <h3 class="essay-title">{{ post.data.title }}</h3>
+                <p class="essay-excerpt">{{ post.data.excerpt }}</p>
+                {% if post.data.tags %}
+                <div class="tags">
+                    {% for t in post.data.tags %}
+                        {% if t != "post" %}
+                        <span class="tag">{{ t }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <span class="essay-meta">{{ post.date | dateFormat }}</span>
+        </a>
+        {% endfor %}
+    </div>
+
+    <a href="/essays/" class="back-link">View all essays</a>
+</section>
+{% endblock %}
