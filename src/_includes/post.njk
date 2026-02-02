@@ -2,8 +2,7 @@
 layout: base.njk
 ---
 
-{% block extra_styles %}
-.post-header { padding: 10rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
+<style>.post-header { padding: 10rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
 .post-meta { font-size: 0.75rem; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 1.5rem; text-transform: uppercase; }
 .post-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.3; margin-bottom: 1.5rem; }
 .post-excerpt { font-size: 1.2rem; color: var(--text-secondary); line-height: 1.7; border-left: 2px solid var(--border); padding-left: 1.5rem; margin-bottom: 2rem; }
@@ -23,9 +22,7 @@ layout: base.njk
 .back-link { display: inline-block; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s ease; }
 .back-link:hover { color: var(--text-primary); }
 .back-link::before { content: "← "; }
-{% endblock %}
-
-{% block content %}
+</style>
 <article>
     <header class="post-header">
         <div class="post-meta">{{ date | dateFormat }}</div>
@@ -62,9 +59,7 @@ layout: base.njk
         <p class="newsletter-note" id="form-message">Powered by <a href="https://nullward.substack.com" target="_blank">Substack</a></p>
     </div>
 </section>
-{% endblock %}
 
-{% block scripts %}
 <script>
     document.getElementById('subscribe-form').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -91,4 +86,3 @@ layout: base.njk
         }, 500);
     });
 </script>
-{% endblock %}
