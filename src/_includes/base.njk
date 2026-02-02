@@ -83,12 +83,10 @@
             .nav-links { gap: 1.5rem; }
             section { padding: 4rem 1.5rem; }
             .essay-item { grid-template-columns: 1fr; gap: 0.5rem; }
-            .essay-meta { order: -1; }
-            .newsletter { padding: 3rem 1.5rem; }
+            .essay-meta { order: -1; }            .newsletter { padding: 3rem 1.5rem; }
             .newsletter-form { flex-direction: column; }
         }
 
-        {% block extra_styles %}{% endblock %}
     </style>
 </head>
 <body>
@@ -101,13 +99,11 @@
         </ul>
     </nav>
 
-    {% block content %}{% endblock %}
-
+    {{ content | safe }}
     <footer>
         <div class="footer-logo">nullward</div>
         <div class="footer-tagline">Into the Unknown</div>
     </footer>
 
-    {% block scripts %}{% endblock %}
 </body>
 </html>
