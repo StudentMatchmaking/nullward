@@ -13,7 +13,7 @@ eleventyComputed:
   title: "Tagged: {{ tag }}"
 ---
 
-{% block extra_styles %}
+<style>
 .page-header {
     padding: 10rem 2rem 2rem;
     max-width: 900px;
@@ -60,9 +60,7 @@ eleventyComputed:
 .back-link::before {
     content: "← ";
 }
-{% endblock %}
-
-{% block content %}
+</style>
 <header class="page-header">
     <span class="tag-label">{{ tag }}</span>
     <h1 class="page-title">Essays tagged "{{ tag }}"</h1>
@@ -93,4 +91,3 @@ eleventyComputed:
 
     <a href="/essays/" class="back-link">View all essays</a>
 </section>
-{% endblock %}
