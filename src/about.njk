@@ -1,0 +1,105 @@
+---
+layout: base.njk
+title: About
+permalink: /about/
+---
+
+{% block extra_styles %}
+.page-header {
+    padding: 10rem 2rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+.about-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+}
+
+.about-content p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.9;
+    margin-bottom: 1.5rem;
+}
+
+.about-content p strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1 class="page-title">About</h1>
+</header>
+
+<div class="about-content">
+    <p>
+        <strong>Nullward</strong> is a space for thinking through the implications of accelerating change—particularly AI, but also economics, policy, and business.
+    </p>
+    <p>
+        The perspective here comes from someone who sits at the intersection of business, technology, and an unconventional path. Not captured by any single tribe's orthodoxy. Willing to be wrong, but thinking carefully.
+    </p>
+    <p>
+        This is anonymous by design. The mask allows for honesty. What you read here are the thoughts I'd share over drinks but not on LinkedIn.
+    </p>
+    <p>
+        The name "Nullward" reflects movement toward the null—the unknown, the undefined, the space where old assumptions break down and new patterns emerge.
+    </p>
+</div>
+
+<section id="subscribe">
+    <div class="newsletter">
+        <h2>Stay Ahead</h2>
+        <p>Monthly essays on AI, economics, and the accelerating future. No spam. Unsubscribe anytime.</p>
+        <form class="newsletter-form" id="subscribe-form">
+            <input type="email" id="email-input" placeholder="your@email.com" required>
+            <button type="submit" id="subscribe-btn">Subscribe</button>
+        </form>
+        <p class="newsletter-note" id="form-message">Powered by <a href="https://nullward.substack.com" target="_blank">Substack</a></p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('subscribe-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email-input').value;
+        const btn = document.getElementById('subscribe-btn');
+        const msg = document.getElementById('form-message');
+
+        btn.textContent = 'Subscribing...';
+        btn.disabled = true;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'https://nullward.substack.com/api/v1/free?nojs=true';
+        form.target = '_blank';
+
+        const emailField = document.createElement('input');
+        emailField.name = 'email';
+        emailField.value = email;
+        form.appendChild(emailField);
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+
+        setTimeout(() => {
+            btn.textContent = 'Subscribed ✓';
+            msg.innerHTML = 'Check your email to confirm your subscription!';
+            msg.style.color = '#4ade80';
+        }, 500);
+    });
+</script>
+{% endblock %}
