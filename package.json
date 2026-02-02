@@ -1,0 +1,12 @@
+{
+  "name": "nullward",
+  "version": "1.0.0",
+  "description": "Nullward - Into the Unknown",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  }
+}
