@@ -1,0 +1,96 @@
+---
+layout: base.njk
+title: Into the Unknown
+---
+
+{% block extra_styles %}
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
+.hero-tagline { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
+.hero h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; line-height: 1.2; margin-bottom: 2rem; letter-spacing: -0.02em; }
+.hero-description { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 3rem; line-height: 1.8; }
+.hero-stat { display: inline-block; padding: 0.75rem 1.5rem; border: 1px solid var(--border); font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.05em; }
+.about-content { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.about-content p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.9; }
+.about-content p strong { color: var(--text-primary); font-weight: 500; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.hero h1, .hero-description, .hero-tagline { animation: fadeInUp 0.8s ease forwards; }
+.hero-description { animation-delay: 0.1s; }
+.hero-stat { animation: fadeInUp 0.8s ease forwards; animation-delay: 0.2s; opacity: 0; }
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <span class="hero-tagline">Into the Unknown</span>
+    <h1>The world is changing faster than anyone expects.</h1>
+    <p class="hero-description">Raw perspectives on AI, economics, and the accelerating future. 99.9% of people are unaware of what's actually happening—and what's coming next.</p>
+    <span class="hero-stat">Thinking in public since 2026</span>
+</section>
+
+<section id="essays">
+    <div class="section-header">Recent Essays</div>
+    <div class="essays-list">
+        {% for post in collections.posts | reverse %}
+        <a href="{{ post.url }}" class="essay-item">
+            <div>
+                <h3 class="essay-title">{{ post.data.title }}</h3>
+                <p class="essay-excerpt">{{ post.data.excerpt }}</p>
+                {% if post.data.tags %}
+                <div class="tags">{% for tag in post.data.tags %}{% if tag != "post" %}<span class="tag">{{ tag }}</span>{% endif %}{% endfor %}</div>
+                {% endif %}
+            </div>
+            <span class="essay-meta">{{ post.date | dateFormat }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="about">
+    <div class="section-header">About</div>
+    <div class="about-content">
+        <p><strong>Nullward</strong> is a space for thinking through the implications of accelerating change—particularly AI, but also economics, policy, and business.</p>
+        <p>The perspective here comes from someone who sits at the intersection of business, technology, and an unconventional path. Not captured by any single tribe's orthodoxy. Willing to be wrong, but thinking carefully.</p>
+        <p>This is anonymous by design. The mask allows for honesty. What you read here are the thoughts I'd share over drinks but not on LinkedIn.</p>
+    </div>
+</section>
+
+<section id="subscribe">
+    <div class="newsletter">
+        <h2>Stay Ahead</h2>
+        <p>Monthly essays on AI, economics, and the accelerating future. No spam. Unsubscribe anytime.</p>
+        <form class="newsletter-form" id="subscribe-form">
+            <input type="email" id="email-input" placeholder="your@email.com" required>
+            <button type="submit" id="subscribe-btn">Subscribe</button>
+        </form>
+        <p class="newsletter-note" id="form-message">Powered by <a href="https://nullward.substack.com" target="_blank">Substack</a></p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('subscribe-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email-input').value;
+    const btn = document.getElementById('subscribe-btn');
+    const msg = document.getElementById('form-message');
+    btn.textContent = 'Subscribing...';
+    btn.disabled = true;
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://nullward.substack.com/api/v1/free?nojs=true';
+    form.target = '_blank';
+    const emailField = document.createElement('input');
+    emailField.name = 'email';
+    emailField.value = email;
+    form.appendChild(emailField);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    setTimeout(() => {
+        btn.textContent = 'Subscribed ✓';
+        msg.innerHTML = 'Check your email to confirm!';
+        msg.style.color = '#4ade80';
+    }, 500);
+});
+</script>
+{% endblock %}
