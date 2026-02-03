@@ -1,5 +1,3 @@
-
-Naivety ai cant be creative · MD
 ---
 title: "The Naivety of 'AI Can't Be Creative': Why the Creativity Debate is Already Over"
 date: 2026-02-01
