@@ -2,6 +2,11 @@ module.exports = function(eleventyConfig) {
   // Copy static assets
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("public");
+    // Favicon files
+    eleventyConfig.addPassthroughCopy("src/*.svg");
+    eleventyConfig.addPassthroughCopy("src/*.png");
+    eleventyConfig.addPassthroughCopy("src/*.ico");
+    eleventyConfig.addPassthroughCopy("src/site.webmanifest");
 
   // Create a collection of all posts
   eleventyConfig.addCollection("posts", function(collectionApi) {
