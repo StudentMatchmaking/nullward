@@ -4,7 +4,7 @@ title: Tags
 permalink: /tags/
 ---
 
-{% block extra_styles %}
+<style>
 .page-header {
     padding: 10rem 2rem 2rem;
     max-width: 900px;
@@ -54,9 +54,8 @@ permalink: /tags/
     font-size: 0.75rem;
     color: var(--text-muted);
 }
-{% endblock %}
+</style>
 
-{% block content %}
 <header class="page-header">
     <h1 class="page-title">Tags</h1>
     <p class="page-description">Browse essays by topic.</p>
@@ -70,4 +69,3 @@ permalink: /tags/
     </a>
     {% endfor %}
 </div>
-{% endblock %}
