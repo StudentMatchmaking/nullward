@@ -26,7 +26,7 @@ eleventyExcludeFromCollections: true
                                                                 </url>
                                                                   {%- for post in collections.posts %}
                                                                     <url>
-                                                                            <lastmod>{{ post.date.toISOString().split('T')[0] }}</lastmod>
+                                                                            <loc>https://nullward.pro{{ post.url }}</loc>                <lastmod>{{ post.date.toISOString().split('T')[0] }}</lastmod>
                                                                                 <changefreq>monthly</changefreq>
                                                                                     <priority>0.7</priority>
                                                                                       </url>
