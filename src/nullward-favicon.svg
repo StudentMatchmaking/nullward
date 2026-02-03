@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  <rect x="100" y="96" width="40" height="320" fill="#ffffff"/>
+  <rect x="372" y="96" width="40" height="320" fill="#ffffff"/>
+  <defs>
+    <mask id="voidMask">
+      <rect width="512" height="512" fill="white"/>
+      <circle cx="256" cy="256" r="64" fill="black"/>
+    </mask>
+  </defs>
+  <path d="M100 96 L140 96 L412 416 L372 416 Z" fill="#ffffff" mask="url(#voidMask)"/>
+</svg>
