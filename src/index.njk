@@ -3,7 +3,7 @@ layout: base.njk
 title: Into the Unknown
 ---
 
-{% block extra_styles %}
+<style>
 .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
 .hero-tagline { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
 .hero h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; line-height: 1.2; margin-bottom: 2rem; letter-spacing: -0.02em; }
@@ -16,9 +16,8 @@ title: Into the Unknown
 .hero h1, .hero-description, .hero-tagline { animation: fadeInUp 0.8s ease forwards; }
 .hero-description { animation-delay: 0.1s; }
 .hero-stat { animation: fadeInUp 0.8s ease forwards; animation-delay: 0.2s; opacity: 0; }
-{% endblock %}
+</style>
 
-{% block content %}
 <section class="hero">
     <span class="hero-tagline">Into the Unknown</span>
     <h1>The world is changing faster than anyone expects.</h1>
@@ -64,9 +63,7 @@ title: Into the Unknown
         <p class="newsletter-note" id="form-message">Powered by <a href="https://nullward.substack.com" target="_blank">Substack</a></p>
     </div>
 </section>
-{% endblock %}
 
-{% block scripts %}
 <script>
 document.getElementById('subscribe-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -93,4 +90,3 @@ document.getElementById('subscribe-form').addEventListener('submit', function(e)
     }, 500);
 });
 </script>
-{% endblock %}
