@@ -52,6 +52,79 @@ title: Into the Unknown
     .viz-stat { flex-direction: column; gap: 1.5rem; }
     .chart-container { height: 280px; }
 }
+
+/* Job Risk Assessment */
+.job-risk { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; border-top: 1px solid var(--border); }
+.job-risk .viz-header { margin-bottom: 2rem; }
+.job-search-container { position: relative; margin-bottom: 2rem; }
+.job-search { width: 100%; padding: 1rem 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-primary); font-size: 1rem; font-family: inherit; transition: border-color 0.2s ease; }
+.job-search:focus { outline: none; border-color: var(--text-muted); }
+.job-search::placeholder { color: var(--text-muted); }
+.search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-secondary); border: 1px solid var(--border); border-top: none; max-height: 250px; overflow-y: auto; z-index: 50; display: none; }
+.search-suggestions.active { display: block; }
+.suggestion-item { padding: 0.75rem 1.25rem; cursor: pointer; transition: background 0.2s ease; display: flex; justify-content: space-between; align-items: center; }
+.suggestion-item:hover { background: var(--bg-tertiary); }
+.suggestion-job { color: var(--text-primary); }
+.suggestion-risk { font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 2px; }
+.suggestion-risk.low { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+.suggestion-risk.moderate { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+.suggestion-risk.high { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+.risk-result { display: none; animation: fadeInUp 0.5s ease forwards; }
+.risk-result.active { display: block; }
+.result-job-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+.result-category { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.risk-meter { margin-bottom: 2rem; }
+.meter-labels { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.meter-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+.meter-bar { height: 8px; background: var(--bg-tertiary); position: relative; overflow: hidden; }
+.meter-fill { height: 100%; width: 0%; transition: width 1s ease-out, background 0.3s ease; }
+.meter-fill.low { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.meter-fill.moderate { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.meter-fill.high { background: linear-gradient(90deg, #ef4444, #dc2626); }
+.meter-marker { position: absolute; top: -8px; transform: translateX(-50%); transition: left 1s ease-out; }
+.meter-marker::after { content: ''; display: block; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--text-primary); }
+
+.risk-score-display { text-align: center; margin-bottom: 2rem; }
+.risk-percentage { font-family: 'Playfair Display', Georgia, serif; font-size: 4rem; line-height: 1; }
+.risk-percentage.low { color: #4ade80; }
+.risk-percentage.moderate { color: #fbbf24; }
+.risk-percentage.high { color: #ef4444; }
+.risk-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-top: 0.5rem; }
+
+.risk-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+.risk-detail { padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border); }
+.detail-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.detail-value { color: var(--text-primary); font-size: 0.95rem; line-height: 1.6; }
+
+.risk-factors { margin-bottom: 2rem; }
+.risk-factors h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 1rem; }
+.factor-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.factor-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--text-secondary); }
+.factor-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+.factor-icon.negative { color: #ef4444; }
+.factor-icon.positive { color: #4ade80; }
+
+@media (max-width: 768px) {
+    .risk-details { grid-template-columns: 1fr; }
+    .risk-percentage { font-size: 3rem; }
+}
+
+/* Most At Risk Section */
+.most-at-risk { margin-top: 2rem; }
+.most-at-risk.hidden { display: none; }
+.most-at-risk-title { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; }
+.at-risk-jobs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.at-risk-card { padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s ease; }
+.at-risk-card:hover { border-color: var(--text-muted); transform: translateY(-2px); }
+.at-risk-job-title { font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.5rem; }
+.at-risk-category { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+.at-risk-percent { font-family: 'Playfair Display', Georgia, serif; font-size: 1.8rem; color: #ef4444; }
+.at-risk-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+@media (max-width: 768px) {
+    .at-risk-jobs { grid-template-columns: 1fr; }
+}
 </style>
 
 <section class="hero">
@@ -113,6 +186,87 @@ title: Into the Unknown
     </div>
 
     <p class="viz-note">Projections based on IMF baseline forecasts adjusted for AI automation rates. Historical data: BLS, ONS, ILO.</p>
+</section>
+
+<section class="job-risk" id="job-risk">
+    <div class="viz-header">
+        <h2 class="viz-title">Is Your Job at Risk?</h2>
+        <p class="viz-subtitle">Search for your occupation to see its AI automation risk assessment.</p>
+    </div>
+
+    <div class="job-search-container">
+        <input type="text" class="job-search" id="job-search" placeholder="Search for your job title..." autocomplete="off">
+        <div class="search-suggestions" id="search-suggestions"></div>
+    </div>
+
+    <div class="most-at-risk" id="most-at-risk">
+        <div class="most-at-risk-title">Most at Risk Jobs</div>
+        <div class="at-risk-jobs">
+            <div class="at-risk-card" data-job="Telephone Operator">
+                <div class="at-risk-job-title">Telephone Operator</div>
+                <div class="at-risk-category">Telecommunications</div>
+                <div class="at-risk-percent">95%</div>
+                <div class="at-risk-label">Risk Score</div>
+            </div>
+            <div class="at-risk-card" data-job="Data Entry Clerk">
+                <div class="at-risk-job-title">Data Entry Clerk</div>
+                <div class="at-risk-category">Administrative</div>
+                <div class="at-risk-percent">94%</div>
+                <div class="at-risk-label">Risk Score</div>
+            </div>
+            <div class="at-risk-card" data-job="File Clerk">
+                <div class="at-risk-job-title">File Clerk</div>
+                <div class="at-risk-category">Administrative</div>
+                <div class="at-risk-percent">93%</div>
+                <div class="at-risk-label">Risk Score</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="risk-result" id="risk-result">
+        <h3 class="result-job-title" id="result-job-title">Software Developer</h3>
+        <p class="result-category" id="result-category">Technology</p>
+
+        <div class="risk-meter">
+            <div class="meter-labels">
+                <span class="meter-label">Low Risk</span>
+                <span class="meter-label">Moderate</span>
+                <span class="meter-label">High Risk</span>
+            </div>
+            <div class="meter-bar">
+                <div class="meter-fill" id="meter-fill"></div>
+                <div class="meter-marker" id="meter-marker"></div>
+            </div>
+        </div>
+
+        <div class="risk-score-display">
+            <div class="risk-percentage" id="risk-percentage">45%</div>
+            <div class="risk-label" id="risk-label">Moderate Risk of AI Displacement</div>
+        </div>
+
+        <div class="risk-details">
+            <div class="risk-detail">
+                <div class="detail-label">Timeline</div>
+                <div class="detail-value" id="detail-timeline">Significant impact expected within 3-5 years as AI coding assistants become more capable.</div>
+            </div>
+            <div class="risk-detail">
+                <div class="detail-label">What AI Can Already Do</div>
+                <div class="detail-value" id="detail-capabilities">Write boilerplate code, debug simple errors, generate documentation, create unit tests.</div>
+            </div>
+        </div>
+
+        <div class="risk-factors">
+            <h4>Key Risk Factors</h4>
+            <div class="factor-list" id="factor-list">
+                <div class="factor-item"><span class="factor-icon negative">−</span> Routine tasks easily automated</div>
+                <div class="factor-item"><span class="factor-icon negative">−</span> Large training datasets available</div>
+                <div class="factor-item"><span class="factor-icon positive">+</span> Requires complex problem-solving</div>
+                <div class="factor-item"><span class="factor-icon positive">+</span> Human judgment still valued</div>
+            </div>
+        </div>
+
+        <p class="viz-note">Risk assessment based on task composition analysis, AI capability trajectories, and labor market research.</p>
+    </div>
 </section>
 
 <section id="essays">
@@ -387,5 +541,316 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     updateChart();
+});
+</script>
+
+<script>
+// Job Risk Assessment Tool
+document.addEventListener('DOMContentLoaded', function() {
+    const jobs = [
+        // === HIGH RISK (70-95%) ===
+        { title: "Data Entry Clerk", category: "Administrative", risk: 94, timeline: "Already being displaced. Most routine data entry will be fully automated within 1-2 years.", capabilities: "Extract data from documents, populate databases, cross-reference records, handle exceptions.", factors: [["negative", "Highly repetitive tasks"], ["negative", "No physical presence required"], ["negative", "Clear input/output patterns"], ["negative", "AI already outperforms humans"]] },
+        { title: "Telemarketer", category: "Sales", risk: 92, timeline: "Rapidly declining. AI voice agents are already handling millions of calls daily.", capabilities: "Make outbound calls, follow scripts, handle objections, schedule appointments, qualify leads.", factors: [["negative", "Scripted conversations"], ["negative", "High volume, low complexity"], ["negative", "AI voice quality now indistinguishable"], ["negative", "24/7 availability advantage"]] },
+        { title: "Bookkeeper", category: "Finance", risk: 89, timeline: "Significant reduction within 2-3 years. AI accounting tools already handle most routine bookkeeping.", capabilities: "Categorize transactions, reconcile accounts, generate reports, track expenses, manage invoices.", factors: [["negative", "Rule-based processes"], ["negative", "Pattern recognition tasks"], ["negative", "Software integration mature"], ["positive", "Some client relationship value"]] },
+        { title: "Paralegal", category: "Legal", risk: 85, timeline: "Major transformation within 2-4 years. Document review and research increasingly automated.", capabilities: "Review contracts, conduct legal research, draft standard documents, organize case files.", factors: [["negative", "Document analysis highly automatable"], ["negative", "Legal research suits AI well"], ["negative", "Template-based drafting"], ["positive", "Court procedures still need humans"]] },
+        { title: "Tax Preparer", category: "Finance", risk: 88, timeline: "Consumer tax prep already largely automated. Professional services shifting within 2-3 years.", capabilities: "Gather financial data, apply tax rules, identify deductions, file returns, handle audits.", factors: [["negative", "Rule-based calculations"], ["negative", "Form filling automated"], ["negative", "Pattern matching for deductions"], ["positive", "Complex cases need judgment"]] },
+        { title: "Customer Service Representative", category: "Service", risk: 82, timeline: "Rapid displacement ongoing. 60% of routine inquiries already handled by AI.", capabilities: "Answer FAQs, process returns, update accounts, troubleshoot common issues, escalate complex cases.", factors: [["negative", "Repetitive query handling"], ["negative", "Knowledge base lookups"], ["negative", "24/7 availability"], ["positive", "Emotional situations need humans"]] },
+        { title: "Truck Driver", category: "Transportation", risk: 78, timeline: "Gradual transition over 5-10 years. Highway driving first, urban delivery later.", capabilities: "Highway autopilot, route optimization, fleet coordination, basic obstacle avoidance.", factors: [["negative", "Highway driving nearly solved"], ["negative", "Huge economic incentive"], ["positive", "Urban navigation complex"], ["positive", "Loading/unloading still manual"]] },
+        { title: "Retail Cashier", category: "Retail", risk: 85, timeline: "Accelerating now. Self-checkout and automated stores expanding rapidly.", capabilities: "Process transactions, scan items, handle payments, bag groceries, basic customer queries.", factors: [["negative", "Amazon Go-style stores scaling"], ["negative", "Self-checkout ubiquitous"], ["negative", "Mobile payment integration"], ["positive", "Loss prevention still needs humans"]] },
+        { title: "Fast Food Worker", category: "Food Service", risk: 75, timeline: "Kitchen automation rolling out over 3-5 years. Front-of-house faster.", capabilities: "Take orders via kiosk/app, prepare standardized items, assembly line cooking.", factors: [["negative", "Kiosk ordering mainstream"], ["negative", "Robotic food prep advancing"], ["positive", "Complex customization harder"], ["positive", "Cleaning and maintenance manual"]] },
+        { title: "Insurance Underwriter", category: "Finance", risk: 80, timeline: "Significant automation within 2-4 years. Routine policies already automated.", capabilities: "Assess risk profiles, price policies, review applications, detect fraud patterns.", factors: [["negative", "Statistical analysis suits AI"], ["negative", "Pattern recognition in claims"], ["negative", "Regulatory rules codifiable"], ["positive", "Novel risks need judgment"]] },
+        { title: "Translator", category: "Language", risk: 76, timeline: "Real-time translation approach human quality. Professional translation commoditizing within 2-3 years.", capabilities: "Translate documents, real-time interpretation, localization, context-aware translation.", factors: [["negative", "Neural translation now excellent"], ["negative", "Speed advantage massive"], ["positive", "Cultural nuance still challenging"], ["positive", "Creative/literary work protected"]] },
+        { title: "Bank Teller", category: "Finance", risk: 84, timeline: "Branch closures accelerating. Most transactions already digital.", capabilities: "Process deposits/withdrawals, answer account questions, basic financial advice.", factors: [["negative", "Mobile banking dominant"], ["negative", "ATMs increasingly capable"], ["negative", "Chatbots handle inquiries"], ["positive", "Complex transactions need humans"]] },
+        { title: "Journalist", category: "Media", risk: 72, timeline: "Commodity news already automated. Investigative journalism protected but shrinking.", capabilities: "Write earnings reports, sports recaps, weather summaries, aggregate news, generate headlines.", factors: [["negative", "Routine reporting automated"], ["negative", "Speed advantage for breaking news"], ["positive", "Investigation requires relationships"], ["positive", "Opinion/analysis valued"]] },
+        { title: "Copywriter", category: "Marketing", risk: 78, timeline: "Commodity copy already AI-generated. Brand voice and strategy still human for now.", capabilities: "Write product descriptions, email campaigns, social posts, ad copy, SEO content.", factors: [["negative", "Template content trivial for AI"], ["negative", "A/B testing automated"], ["positive", "Brand strategy needs humans"], ["positive", "Creative campaigns harder"]] },
+        { title: "Travel Agent", category: "Service", risk: 86, timeline: "Online booking dominates. AI now handles complex itineraries and recommendations.", capabilities: "Search flights/hotels, compare prices, build itineraries, handle bookings, provide recommendations.", factors: [["negative", "Online booking mainstream"], ["negative", "AI recommendations improving"], ["negative", "Price comparison automated"], ["positive", "Luxury/complex travel needs humans"]] },
+        { title: "Proofreader", category: "Publishing", risk: 88, timeline: "AI grammar and style tools already exceed human accuracy for most content.", capabilities: "Check grammar, spelling, punctuation, style consistency, formatting.", factors: [["negative", "Grammar checking automated"], ["negative", "Style guides codifiable"], ["negative", "Speed advantage massive"], ["positive", "Creative/nuanced text harder"]] },
+        { title: "File Clerk", category: "Administrative", risk: 93, timeline: "Digital document management has largely eliminated this role.", capabilities: "Organize files, retrieve documents, maintain filing systems, digitize records.", factors: [["negative", "Digital systems dominant"], ["negative", "Search replaces filing"], ["negative", "OCR handles digitization"], ["negative", "No physical presence needed"]] },
+        { title: "Receptionist", category: "Administrative", risk: 79, timeline: "Virtual receptionists and scheduling AI rapidly expanding.", capabilities: "Answer calls, schedule appointments, greet visitors, manage calendars, basic inquiries.", factors: [["negative", "Virtual assistants capable"], ["negative", "Scheduling automated"], ["negative", "Chatbots handle FAQs"], ["positive", "Physical presence sometimes valued"]] },
+        { title: "Library Technician", category: "Education", risk: 77, timeline: "Digital catalogs and self-service systems reducing demand.", capabilities: "Catalog materials, assist searches, manage checkouts, maintain databases.", factors: [["negative", "Digital catalogs automated"], ["negative", "Self-checkout expanding"], ["negative", "Search engines powerful"], ["positive", "Research assistance valued"]] },
+        { title: "Telephone Operator", category: "Telecommunications", risk: 95, timeline: "Nearly extinct. Automated systems handle virtually all routing.", capabilities: "Route calls, provide directory assistance, handle operator-assisted calls.", factors: [["negative", "Fully automated routing"], ["negative", "Voice recognition mature"], ["negative", "No role remaining"], ["negative", "Cost prohibitive vs automation"]] },
+        { title: "Watch Repairer", category: "Retail", risk: 71, timeline: "Smartwatches and disposable fashion watches reducing repair demand.", capabilities: "Diagnose issues, replace batteries, clean mechanisms, replace parts.", factors: [["negative", "Smartwatch dominance"], ["negative", "Disposable products"], ["positive", "Luxury watches still need humans"], ["positive", "Fine motor skills required"]] },
+        { title: "Postal Service Clerk", category: "Government", risk: 74, timeline: "Email and digital communications have slashed mail volumes.", capabilities: "Sort mail, sell postage, process packages, handle customs forms.", factors: [["negative", "Mail volume declining"], ["negative", "Self-service kiosks"], ["negative", "Automated sorting"], ["positive", "Complex packages need humans"]] },
+        { title: "Insurance Claims Processor", category: "Finance", risk: 83, timeline: "Routine claims increasingly auto-adjudicated. Complex claims still need humans.", capabilities: "Review claims, verify coverage, calculate payouts, detect fraud, process payments.", factors: [["negative", "Rule-based processing"], ["negative", "Pattern detection automated"], ["negative", "Document extraction mature"], ["positive", "Complex claims need judgment"]] },
+        { title: "Mortgage Loan Processor", category: "Finance", risk: 81, timeline: "Document verification and underwriting increasingly automated.", capabilities: "Verify documents, check credit, calculate ratios, prepare files, coordinate closings.", factors: [["negative", "Document verification automated"], ["negative", "Credit checks instant"], ["negative", "Calculations trivial"], ["positive", "Complex cases need humans"]] },
+        { title: "Sports Referee", category: "Sports", risk: 70, timeline: "Video review and sensors expanding. Full automation unlikely but role shrinking.", capabilities: "Track plays via sensors, review footage, enforce rules, make instant calls.", factors: [["negative", "Video review expanding"], ["negative", "Sensor tracking accurate"], ["positive", "Game management human"], ["positive", "Player interactions personal"]] },
+
+        // === MODERATE RISK (35-69%) ===
+        { title: "Software Developer", category: "Technology", risk: 58, timeline: "Significant transformation within 3-5 years. Junior roles most affected.", capabilities: "Write boilerplate code, debug simple errors, generate documentation, create unit tests, refactor code.", factors: [["negative", "Routine coding automatable"], ["negative", "Large training datasets exist"], ["positive", "Architecture decisions need humans"], ["positive", "Complex debugging still hard"]] },
+        { title: "Software Engineer", category: "Technology", risk: 55, timeline: "AI assists but complex system design remains human domain for now.", capabilities: "Code generation, code review, documentation, testing, refactoring suggestions.", factors: [["negative", "Coding assistance mature"], ["negative", "Pattern matching effective"], ["positive", "System architecture complex"], ["positive", "Requirements interpretation"]] },
+        { title: "Web Developer", category: "Technology", risk: 65, timeline: "Template sites AI-generated. Custom development more protected.", capabilities: "Generate websites from prompts, create components, style pages, basic interactivity.", factors: [["negative", "Template sites automated"], ["negative", "No-code tools expanding"], ["positive", "Custom work still valued"], ["positive", "Complex integrations harder"]] },
+        { title: "Data Scientist", category: "Technology", risk: 52, timeline: "AutoML handles routine analysis. Strategic insight and communication still human.", capabilities: "Build models, clean data, generate visualizations, run experiments, write reports.", factors: [["negative", "AutoML increasingly capable"], ["negative", "Routine analysis automated"], ["positive", "Business context needed"], ["positive", "Communication skills valued"]] },
+        { title: "Data Analyst", category: "Technology", risk: 62, timeline: "Dashboard creation and routine analysis automating. Insight generation shifting.", capabilities: "Query databases, build dashboards, generate reports, identify trends, visualize data.", factors: [["negative", "SQL generation automated"], ["negative", "Dashboard tools maturing"], ["positive", "Context interpretation needed"], ["positive", "Stakeholder communication"]] },
+        { title: "Accountant", category: "Finance", risk: 65, timeline: "Routine accounting automated within 2-3 years. Advisory roles growing.", capabilities: "Prepare financial statements, audit transactions, tax planning basics, compliance checking.", factors: [["negative", "Calculations fully automated"], ["negative", "Audit patterns detectable"], ["positive", "Client relationships matter"], ["positive", "Strategic advice valued"]] },
+        { title: "Financial Analyst", category: "Finance", risk: 55, timeline: "Quantitative analysis increasingly automated. Strategic insight still valued.", capabilities: "Build financial models, analyze market data, generate reports, identify patterns.", factors: [["negative", "Data analysis suits AI"], ["negative", "Report generation automated"], ["positive", "Strategy requires judgment"], ["positive", "Client communication important"]] },
+        { title: "Marketing Manager", category: "Marketing", risk: 45, timeline: "Execution increasingly automated. Strategy and creativity remain human domains.", capabilities: "Analyze campaign performance, optimize ad spend, A/B testing, audience segmentation.", factors: [["negative", "Analytics fully automated"], ["negative", "Media buying algorithmic"], ["positive", "Brand strategy needs humans"], ["positive", "Creative direction valued"]] },
+        { title: "HR Manager", category: "Human Resources", risk: 48, timeline: "Administrative HR heavily automated. People management remains human.", capabilities: "Screen resumes, schedule interviews, answer policy questions, track compliance.", factors: [["negative", "Screening automated"], ["negative", "Policy Q&A via chatbot"], ["positive", "Conflict resolution needs humans"], ["positive", "Culture building personal"]] },
+        { title: "HR Specialist", category: "Human Resources", risk: 58, timeline: "Recruitment and admin tasks automating. Employee relations still human.", capabilities: "Screen applications, schedule interviews, onboard employees, answer HR queries.", factors: [["negative", "ATS screening mature"], ["negative", "Scheduling automated"], ["positive", "Sensitive conversations human"], ["positive", "Policy interpretation"]] },
+        { title: "Recruiter", category: "Human Resources", risk: 55, timeline: "Sourcing and screening automating. Relationship building still valued.", capabilities: "Source candidates, screen resumes, schedule interviews, match roles, outreach.", factors: [["negative", "Sourcing automated"], ["negative", "Screening AI-assisted"], ["positive", "Candidate relationships"], ["positive", "Sell and close human"]] },
+        { title: "Teacher", category: "Education", risk: 42, timeline: "Supplementary AI tools growing. Core teaching relationship remains human.", capabilities: "Personalized tutoring, grade assignments, create lesson plans, answer factual questions.", factors: [["negative", "Tutoring increasingly effective"], ["negative", "Grading automatable"], ["positive", "Mentorship irreplaceable"], ["positive", "Classroom management human"]] },
+        { title: "Professor", category: "Education", risk: 38, timeline: "Research assistance and grading automated. Teaching and mentorship remain human.", capabilities: "Literature review, grade papers, create materials, answer student questions.", factors: [["negative", "Research assistance growing"], ["negative", "Grading automatable"], ["positive", "Original research valued"], ["positive", "Mentorship essential"]] },
+        { title: "Registered Nurse", category: "Healthcare", risk: 35, timeline: "AI assists with monitoring and documentation. Direct care remains human.", capabilities: "Monitor vitals, flag anomalies, document care, medication reminders, triage support.", factors: [["negative", "Monitoring automated"], ["negative", "Documentation assisted"], ["positive", "Physical care needs humans"], ["positive", "Emotional support critical"]] },
+        { title: "Sales Representative", category: "Sales", risk: 52, timeline: "Inside sales transforming. Relationship-based sales more protected.", capabilities: "Lead scoring, email outreach, CRM updates, meeting scheduling, proposal generation.", factors: [["negative", "Lead gen automated"], ["negative", "Outreach scalable by AI"], ["positive", "Complex sales need trust"], ["positive", "Negotiation still human"]] },
+        { title: "Sales Manager", category: "Sales", risk: 42, timeline: "Forecasting and reporting automated. Coaching and strategy remain human.", capabilities: "Forecast sales, analyze pipeline, generate reports, track performance.", factors: [["negative", "Analytics automated"], ["negative", "Forecasting AI-assisted"], ["positive", "Team coaching human"], ["positive", "Strategy and motivation"]] },
+        { title: "Project Manager", category: "Management", risk: 45, timeline: "Administrative tasks automated. Leadership and stakeholder management remain human.", capabilities: "Schedule management, resource allocation, status reporting, risk tracking.", factors: [["negative", "Scheduling automated"], ["negative", "Reporting generated"], ["positive", "Team leadership needs humans"], ["positive", "Stakeholder navigation complex"]] },
+        { title: "Product Manager", category: "Technology", risk: 40, timeline: "Analytics and research assisted. Vision and prioritization remain human.", capabilities: "Analyze metrics, research competitors, draft requirements, prioritize features.", factors: [["negative", "Analytics automated"], ["negative", "Research assisted"], ["positive", "Vision setting human"], ["positive", "Stakeholder management"]] },
+        { title: "Graphic Designer", category: "Creative", risk: 62, timeline: "Template work already AI-generated. Strategic design work more protected.", capabilities: "Generate variations, resize assets, create social graphics, basic layouts, style transfer.", factors: [["negative", "Production work automated"], ["negative", "Template generation trivial"], ["positive", "Brand systems need humans"], ["positive", "Client collaboration valued"]] },
+        { title: "UX Designer", category: "Technology", risk: 48, timeline: "Wireframes and prototypes AI-assisted. Research and strategy still human.", capabilities: "Generate wireframes, create prototypes, suggest layouts, analyze patterns.", factors: [["negative", "Layout generation improving"], ["negative", "Pattern libraries extensive"], ["positive", "User research human"], ["positive", "Strategic thinking valued"]] },
+        { title: "UI Designer", category: "Technology", risk: 55, timeline: "Component generation automated. System-level design more protected.", capabilities: "Generate UI components, create variations, apply styles, build design systems.", factors: [["negative", "Component generation easy"], ["negative", "Style transfer mature"], ["positive", "Holistic vision human"], ["positive", "Brand interpretation"]] },
+        { title: "Real Estate Agent", category: "Sales", risk: 48, timeline: "Transaction coordination automating. Relationship and local expertise still valued.", capabilities: "Match listings to buyers, generate descriptions, schedule showings, paperwork processing.", factors: [["negative", "Search/matching automated"], ["negative", "Documentation streamlined"], ["positive", "Negotiation needs humans"], ["positive", "Local expertise valuable"]] },
+        { title: "Chef", category: "Food Service", risk: 38, timeline: "Recipe development assisted. Execution in fine dining protected.", capabilities: "Generate recipes, optimize menus, cost calculations, basic prep automation.", factors: [["negative", "Recipe creation possible"], ["negative", "Menu optimization automated"], ["positive", "Plating and creativity human"], ["positive", "Kitchen leadership needed"]] },
+        { title: "Architect", category: "Design", risk: 42, timeline: "Generative design tools emerging. Client relationships and vision remain human.", capabilities: "Generate floor plans, optimize layouts, code compliance checking, visualization.", factors: [["negative", "Layout generation advancing"], ["negative", "Compliance checking automated"], ["positive", "Client vision interpretation"], ["positive", "Aesthetic judgment valued"]] },
+        { title: "Interior Designer", category: "Design", risk: 52, timeline: "Room visualization and furniture placement AI-assisted. Client relationships protected.", capabilities: "Generate room layouts, visualize designs, suggest furniture, create mood boards.", factors: [["negative", "Visualization automated"], ["negative", "Style matching easy"], ["positive", "Client interpretation"], ["positive", "Tactile assessment human"]] },
+        { title: "Pharmacist", category: "Healthcare", risk: 58, timeline: "Dispensing automating. Clinical consulting and patient education still valued.", capabilities: "Check interactions, verify prescriptions, dispense medications, track inventory.", factors: [["negative", "Dispensing automated"], ["negative", "Interaction checking mature"], ["positive", "Patient counseling valued"], ["positive", "Clinical judgment needed"]] },
+        { title: "Optometrist", category: "Healthcare", risk: 45, timeline: "Diagnostic equipment improving. Patient relationship and treatment planning human.", capabilities: "Automated refraction, image analysis, disease screening, prescription calculation.", factors: [["negative", "Screening automated"], ["negative", "Refraction improving"], ["positive", "Complex cases need humans"], ["positive", "Patient relationships"]] },
+        { title: "Photographer", category: "Creative", risk: 55, timeline: "AI editing and enhancement mature. Event and portrait work more protected.", capabilities: "Auto-enhance images, remove backgrounds, generate variations, basic retouching.", factors: [["negative", "Post-processing automated"], ["negative", "Stock photos AI-generated"], ["positive", "Creative direction human"], ["positive", "Client relationships"]] },
+        { title: "Video Editor", category: "Media", risk: 60, timeline: "Auto-editing and assembly improving. Creative storytelling still human.", capabilities: "Auto-cut footage, sync audio, color correct, generate captions, basic assembly.", factors: [["negative", "Technical editing automated"], ["negative", "Template editing easy"], ["positive", "Narrative judgment human"], ["positive", "Creative storytelling"]] },
+        { title: "Content Writer", category: "Marketing", risk: 68, timeline: "SEO and commodity content automated. Voice and expertise more protected.", capabilities: "Generate articles, optimize for SEO, create variations, research topics.", factors: [["negative", "Commodity content trivial"], ["negative", "SEO optimization automated"], ["positive", "Expertise and voice valued"], ["positive", "Thought leadership human"]] },
+        { title: "Technical Writer", category: "Technology", risk: 65, timeline: "Documentation generation improving. Complex explanations still need humans.", capabilities: "Generate docs from code, create templates, maintain consistency, update references.", factors: [["negative", "Auto-documentation growing"], ["negative", "Template-based content"], ["positive", "Complex explanation human"], ["positive", "User empathy needed"]] },
+        { title: "Social Media Manager", category: "Marketing", risk: 58, timeline: "Scheduling and analytics automated. Strategy and community management human.", capabilities: "Schedule posts, generate content, analyze metrics, suggest trends.", factors: [["negative", "Scheduling trivial"], ["negative", "Content generation capable"], ["positive", "Community authentic"], ["positive", "Crisis response human"]] },
+        { title: "Executive Assistant", category: "Administrative", risk: 55, timeline: "Scheduling and correspondence assisted. Strategic support still valued.", capabilities: "Manage calendars, draft emails, book travel, prepare briefings, track tasks.", factors: [["negative", "Scheduling automated"], ["negative", "Email drafting assisted"], ["positive", "Anticipating needs human"], ["positive", "Relationship management"]] },
+        { title: "Personal Assistant", category: "Administrative", risk: 50, timeline: "Digital assistants handle routine tasks. Complex coordination still human.", capabilities: "Schedule management, reminders, bookings, research, basic correspondence.", factors: [["negative", "Routine tasks automated"], ["negative", "Scheduling trivial"], ["positive", "Complex judgment needed"], ["positive", "Personal touch valued"]] },
+        { title: "Investment Banker", category: "Finance", risk: 45, timeline: "Analysis and modeling automated. Deal-making and relationships remain human.", capabilities: "Build models, analyze markets, generate pitch decks, value companies.", factors: [["negative", "Modeling automated"], ["negative", "Analysis AI-assisted"], ["positive", "Relationships critical"], ["positive", "Deal judgment human"]] },
+        { title: "Management Consultant", category: "Consulting", risk: 48, timeline: "Research and analysis automated. Client relationships and strategy human.", capabilities: "Market research, competitive analysis, benchmark studies, report generation.", factors: [["negative", "Research automated"], ["negative", "Analysis AI-assisted"], ["positive", "Client relationships"], ["positive", "Implementation human"]] },
+        { title: "Economist", category: "Research", risk: 50, timeline: "Forecasting models improved. Novel research and policy advice human.", capabilities: "Build models, analyze data, generate forecasts, create reports.", factors: [["negative", "Forecasting AI-assisted"], ["negative", "Data analysis automated"], ["positive", "Novel research valued"], ["positive", "Policy interpretation human"]] },
+        { title: "Actuary", category: "Finance", risk: 55, timeline: "Routine calculations automated. Model design and judgment still human.", capabilities: "Run calculations, model scenarios, analyze mortality data, generate reports.", factors: [["negative", "Calculations trivial"], ["negative", "Modeling assisted"], ["positive", "Model design human"], ["positive", "Assumption judgment"]] },
+        { title: "Statistician", category: "Research", risk: 52, timeline: "Standard analyses automated. Experimental design and interpretation human.", capabilities: "Run analyses, visualize data, model relationships, generate reports.", factors: [["negative", "Analysis automated"], ["negative", "Visualization easy"], ["positive", "Design judgment human"], ["positive", "Interpretation needed"]] },
+        { title: "Operations Manager", category: "Management", risk: 42, timeline: "Monitoring and reporting automated. People and process management human.", capabilities: "Monitor KPIs, generate reports, optimize schedules, track inventory.", factors: [["negative", "Analytics automated"], ["negative", "Scheduling assisted"], ["positive", "People management human"], ["positive", "Crisis response"]] },
+        { title: "Supply Chain Manager", category: "Management", risk: 48, timeline: "Optimization and tracking automated. Relationship and crisis management human.", capabilities: "Optimize routes, track shipments, forecast demand, manage inventory.", factors: [["negative", "Optimization automated"], ["negative", "Tracking trivial"], ["positive", "Supplier relationships"], ["positive", "Crisis navigation"]] },
+        { title: "Quality Assurance Analyst", category: "Technology", risk: 60, timeline: "Test generation and execution automating. Strategy and edge cases human.", capabilities: "Generate test cases, execute tests, track bugs, create reports.", factors: [["negative", "Test generation improving"], ["negative", "Execution automated"], ["positive", "Edge case thinking human"], ["positive", "User perspective"]] },
+        { title: "Business Analyst", category: "Technology", risk: 52, timeline: "Requirements documentation assisted. Stakeholder translation still human.", capabilities: "Document requirements, create diagrams, analyze processes, generate reports.", factors: [["negative", "Documentation assisted"], ["negative", "Diagramming automated"], ["positive", "Stakeholder translation"], ["positive", "Process judgment"]] },
+        { title: "Systems Administrator", category: "Technology", risk: 55, timeline: "Routine maintenance automated. Complex troubleshooting still human.", capabilities: "Monitor systems, apply patches, manage backups, detect anomalies.", factors: [["negative", "Monitoring automated"], ["negative", "Patching routine"], ["positive", "Complex debugging human"], ["positive", "Security judgment"]] },
+        { title: "Network Engineer", category: "Technology", risk: 50, timeline: "Configuration and monitoring automated. Architecture and security human.", capabilities: "Configure devices, monitor traffic, troubleshoot issues, optimize performance.", factors: [["negative", "Configuration templated"], ["negative", "Monitoring automated"], ["positive", "Architecture judgment"], ["positive", "Security expertise"]] },
+        { title: "Database Administrator", category: "Technology", risk: 55, timeline: "Routine management automated. Optimization and design still human.", capabilities: "Monitor performance, automate backups, tune queries, manage access.", factors: [["negative", "Cloud management easy"], ["negative", "Monitoring automated"], ["positive", "Design decisions human"], ["positive", "Optimization complex"]] },
+        { title: "Cybersecurity Analyst", category: "Technology", risk: 45, timeline: "Threat detection AI-assisted. Response and strategy remain human.", capabilities: "Detect threats, analyze logs, identify patterns, generate alerts.", factors: [["negative", "Detection automated"], ["negative", "Log analysis assisted"], ["positive", "Novel threats human"], ["positive", "Response judgment"]] },
+        { title: "Mechanical Engineer", category: "Engineering", risk: 42, timeline: "Design assistance growing. Physical prototyping and testing human.", capabilities: "Generate designs, simulate performance, optimize structures, calculate loads.", factors: [["negative", "CAD assistance growing"], ["negative", "Simulation automated"], ["positive", "Physical testing human"], ["positive", "Novel design judgment"]] },
+        { title: "Civil Engineer", category: "Engineering", risk: 40, timeline: "Design tools improving. Site assessment and judgment remain human.", capabilities: "Generate designs, calculate structures, check compliance, create drawings.", factors: [["negative", "Design assistance"], ["negative", "Calculations automated"], ["positive", "Site judgment human"], ["positive", "Safety critical"]] },
+        { title: "Electrical Engineer", category: "Engineering", risk: 45, timeline: "Circuit design assisted. Complex systems and integration human.", capabilities: "Generate schematics, simulate circuits, optimize designs, check compliance.", factors: [["negative", "Design assistance"], ["negative", "Simulation mature"], ["positive", "Integration complex"], ["positive", "Safety judgment"]] },
+        { title: "Chemical Engineer", category: "Engineering", risk: 40, timeline: "Process simulation improved. Physical implementation human.", capabilities: "Model processes, optimize reactions, simulate systems, calculate yields.", factors: [["negative", "Simulation advanced"], ["negative", "Optimization automated"], ["positive", "Physical process human"], ["positive", "Safety critical"]] },
+        { title: "Biomedical Engineer", category: "Engineering", risk: 38, timeline: "Design tools improving. Regulatory and clinical judgment human.", capabilities: "Model devices, simulate performance, analyze data, generate documentation.", factors: [["negative", "Design assistance"], ["negative", "Simulation improving"], ["positive", "Regulatory judgment"], ["positive", "Clinical collaboration"]] },
+        { title: "Environmental Scientist", category: "Science", risk: 42, timeline: "Data analysis automated. Field work and policy interpretation human.", capabilities: "Analyze samples, model ecosystems, generate reports, predict impacts.", factors: [["negative", "Analysis automated"], ["negative", "Modeling improved"], ["positive", "Fieldwork human"], ["positive", "Policy interpretation"]] },
+        { title: "Research Scientist", category: "Science", risk: 40, timeline: "Literature review and data analysis assisted. Novel research human.", capabilities: "Search literature, analyze data, generate hypotheses, write papers.", factors: [["negative", "Literature search automated"], ["negative", "Data analysis assisted"], ["positive", "Novel ideas human"], ["positive", "Experimental design"]] },
+        { title: "Lab Technician", category: "Science", risk: 55, timeline: "Automation expanding in labs. Complex procedures still manual.", capabilities: "Run routine tests, record results, maintain equipment, prepare samples.", factors: [["negative", "Routine tests automated"], ["negative", "Recording digital"], ["positive", "Complex procedures manual"], ["positive", "Troubleshooting human"]] },
+        { title: "Radiologist", category: "Healthcare", risk: 58, timeline: "Image analysis AI matches humans. Clinical correlation still needed.", capabilities: "Analyze images, detect anomalies, measure structures, compare studies.", factors: [["negative", "Detection AI excellent"], ["negative", "Pattern matching mature"], ["positive", "Clinical correlation"], ["positive", "Complex cases human"]] },
+        { title: "Pathologist", category: "Healthcare", risk: 52, timeline: "Digital pathology improving. Complex diagnoses still need humans.", capabilities: "Analyze slides, detect patterns, grade tumors, generate reports.", factors: [["negative", "Pattern detection advancing"], ["negative", "Routine screening automated"], ["positive", "Complex cases human"], ["positive", "Clinical correlation"]] },
+        { title: "Anesthesiologist", category: "Healthcare", risk: 35, timeline: "Monitoring assisted but dosing judgment and crisis response human.", capabilities: "Monitor vitals, adjust infusions, predict complications, track parameters.", factors: [["positive", "Crisis response human"], ["positive", "Patient variation complex"], ["negative", "Monitoring automated"], ["negative", "Standard cases routine"]] },
+        { title: "Audiologist", category: "Healthcare", risk: 48, timeline: "Hearing tests automating. Treatment planning and counseling human.", capabilities: "Run hearing tests, fit devices, program aids, analyze patterns.", factors: [["negative", "Testing automated"], ["negative", "Fitting assisted"], ["positive", "Counseling human"], ["positive", "Complex cases"]] },
+        { title: "Speech Therapist", category: "Healthcare", risk: 40, timeline: "Practice apps growing. Assessment and relationship still human.", capabilities: "Provide exercises, track progress, offer feedback, assess patterns.", factors: [["negative", "Practice apps effective"], ["negative", "Feedback automated"], ["positive", "Relationship essential"], ["positive", "Complex cases human"]] },
+        { title: "Occupational Therapist", category: "Healthcare", risk: 35, timeline: "Assessment tools improving. Hands-on therapy remains human.", capabilities: "Assess function, suggest adaptations, track progress, provide exercises.", factors: [["positive", "Physical presence required"], ["positive", "Adaptation judgment"], ["negative", "Assessment assisted"], ["negative", "Exercise apps growing"]] },
+        { title: "Dietitian", category: "Healthcare", risk: 48, timeline: "Meal planning automated. Medical nutrition therapy still human.", capabilities: "Generate meal plans, calculate nutrition, track intake, suggest alternatives.", factors: [["negative", "Meal planning easy"], ["negative", "Calculation automated"], ["positive", "Medical cases complex"], ["positive", "Behavior change human"]] },
+        { title: "Fitness Trainer", category: "Health", risk: 45, timeline: "Workout apps proliferating. Motivation and form correction human.", capabilities: "Generate workouts, track progress, suggest exercises, monitor metrics.", factors: [["negative", "Workout generation easy"], ["negative", "Tracking automated"], ["positive", "Motivation human"], ["positive", "Form correction physical"]] },
+        { title: "Life Coach", category: "Personal Services", risk: 42, timeline: "Chatbot coaching exists. Deep transformation work remains human.", capabilities: "Goal setting frameworks, accountability prompts, resource suggestions.", factors: [["negative", "Basic frameworks automated"], ["negative", "Reminders trivial"], ["positive", "Deep work human"], ["positive", "Accountability personal"]] },
+        { title: "Event Planner", category: "Service", risk: 50, timeline: "Logistics and vendor management assisted. Creative vision human.", capabilities: "Find vendors, manage timelines, track budgets, coordinate schedules.", factors: [["negative", "Logistics assisted"], ["negative", "Scheduling automated"], ["positive", "Creative vision human"], ["positive", "Crisis management"]] },
+        { title: "Wedding Planner", category: "Service", risk: 45, timeline: "Planning tools proliferating. Personal touch and relationships valued.", capabilities: "Track timelines, manage vendors, coordinate schedules, suggest ideas.", factors: [["negative", "Planning tools easy"], ["negative", "Vendor databases"], ["positive", "Personal relationships"], ["positive", "Day-of coordination"]] },
+        { title: "Tour Guide", category: "Tourism", risk: 55, timeline: "Audio guides and AR apps growing. Charismatic storytelling protected.", capabilities: "Provide information, answer questions, suggest routes, translate.", factors: [["negative", "Information apps good"], ["negative", "Translation automated"], ["positive", "Storytelling human"], ["positive", "Spontaneous interaction"]] },
+        { title: "Flight Attendant", category: "Transportation", risk: 38, timeline: "Service automation limited. Safety and human comfort remain priorities.", capabilities: "Answer questions, provide information, track service, manage inventory.", factors: [["positive", "Safety training required"], ["positive", "Physical presence needed"], ["positive", "Emotional labor human"], ["negative", "Information queries automated"]] },
+        { title: "Hotel Concierge", category: "Hospitality", risk: 55, timeline: "Digital concierges growing. Luxury service still needs humans.", capabilities: "Make recommendations, book reservations, answer queries, arrange services.", factors: [["negative", "Recommendations automated"], ["negative", "Booking trivial"], ["positive", "Luxury service human"], ["positive", "Problem solving"]] },
+        { title: "Bartender", category: "Hospitality", risk: 38, timeline: "Drink mixing robots exist but social element protects role.", capabilities: "Mix standard drinks, suggest pairings, manage tabs, track inventory.", factors: [["positive", "Social interaction valued"], ["positive", "Atmosphere creation"], ["negative", "Standard drinks automated"], ["negative", "Payment processing"]] },
+        { title: "Waiter/Waitress", category: "Hospitality", risk: 45, timeline: "Ordering kiosks and robots growing. Fine dining protected.", capabilities: "Take orders, suggest items, process payments, coordinate kitchen.", factors: [["negative", "Ordering automated"], ["negative", "Payment kiosks"], ["positive", "Fine dining human"], ["positive", "Hospitality valued"]] },
+
+        // === LOW RISK (5-34%) ===
+        { title: "Surgeon", category: "Healthcare", risk: 18, timeline: "Robotic assistance growing but human judgment and dexterity essential for decades.", capabilities: "Surgical planning, image analysis, precision assistance, post-op monitoring.", factors: [["positive", "Physical dexterity required"], ["positive", "Split-second judgment critical"], ["positive", "Patient trust essential"], ["negative", "Robotic assistance increasing"]] },
+        { title: "Psychiatrist", category: "Healthcare", risk: 15, timeline: "AI may assist with screening but therapeutic relationship fundamentally human.", capabilities: "Symptom screening, medication interaction checks, progress tracking, resource suggestions.", factors: [["positive", "Deep human connection required"], ["positive", "Ethical judgment essential"], ["positive", "Trust and rapport critical"], ["negative", "Screening tools improving"]] },
+        { title: "Electrician", category: "Trades", risk: 22, timeline: "Diagnostic tools improving but physical work in varied environments remains human.", capabilities: "Diagnostic assistance, code lookups, system design, inventory management.", factors: [["positive", "Physical dexterity required"], ["positive", "Varied environments"], ["positive", "Problem-solving in context"], ["negative", "Diagnostics assisted by AI"]] },
+        { title: "Plumber", category: "Trades", risk: 20, timeline: "Physical work in unpredictable environments resists automation.", capabilities: "Diagnostic assistance, parts lookup, system design, scheduling.", factors: [["positive", "Physical access required"], ["positive", "Unpredictable situations"], ["positive", "Customer interaction"], ["negative", "Diagnostics can be assisted"]] },
+        { title: "HVAC Technician", category: "Trades", risk: 24, timeline: "Diagnostics improving but physical installation and repair human.", capabilities: "Diagnose issues, lookup parts, calculate loads, schedule maintenance.", factors: [["positive", "Physical installation"], ["positive", "Varied environments"], ["positive", "Customer interaction"], ["negative", "Diagnostics assisted"]] },
+        { title: "Carpenter", category: "Trades", risk: 25, timeline: "CNC and prefab growing but custom work resists automation.", capabilities: "Generate plans, calculate materials, optimize cuts, create drawings.", factors: [["positive", "Physical craftsmanship"], ["positive", "Custom work valued"], ["positive", "On-site adaptation"], ["negative", "CNC for standard items"]] },
+        { title: "Welder", category: "Trades", risk: 30, timeline: "Robotic welding expanding in factories. Field work remains human.", capabilities: "Robotic arm control, quality monitoring, pattern execution.", factors: [["positive", "Field work unpredictable"], ["positive", "Repair work varied"], ["negative", "Factory welding automated"], ["negative", "Standard joints trivial"]] },
+        { title: "Auto Mechanic", category: "Trades", risk: 32, timeline: "Diagnostics improving but physical repair remains human. EVs may simplify.", capabilities: "Diagnose via OBD, lookup procedures, order parts, estimate costs.", factors: [["positive", "Physical repair needed"], ["positive", "Problem-solving"], ["negative", "Diagnostics automated"], ["negative", "EVs simpler"]] },
+        { title: "Diesel Mechanic", category: "Trades", risk: 28, timeline: "Heavy equipment complexity protects role. Diagnostics still assisted.", capabilities: "Diagnostic scanning, procedure lookup, parts ordering, service scheduling.", factors: [["positive", "Complex machinery"], ["positive", "Field service needed"], ["positive", "Heavy equipment"], ["negative", "Diagnostics assisted"]] },
+        { title: "Aircraft Mechanic", category: "Transportation", risk: 25, timeline: "Safety regulations and complexity protect role. Inspection may automate.", capabilities: "Diagnostic assistance, procedure lookup, parts tracking, compliance checking.", factors: [["positive", "Safety critical"], ["positive", "Regulatory requirements"], ["positive", "Complex systems"], ["negative", "Inspection assisted"]] },
+        { title: "Social Worker", category: "Social Services", risk: 25, timeline: "Administrative tasks may automate but human connection at the core.", capabilities: "Case documentation, resource matching, risk assessment tools, scheduling.", factors: [["positive", "Human judgment essential"], ["positive", "Relationship-based work"], ["positive", "Complex family dynamics"], ["negative", "Documentation automatable"]] },
+        { title: "Physical Therapist", category: "Healthcare", risk: 28, timeline: "AI may assist with programs but hands-on treatment remains human.", capabilities: "Progress tracking, exercise suggestions, outcome predictions, scheduling.", factors: [["positive", "Physical touch required"], ["positive", "Real-time adaptation needed"], ["positive", "Motivation and coaching"], ["negative", "Program design assisted"]] },
+        { title: "CEO", category: "Executive", risk: 12, timeline: "AI informs decisions but leadership, vision, and stakeholder management remain human.", capabilities: "Data synthesis, scenario modeling, market analysis, communication drafting.", factors: [["positive", "Vision and strategy human"], ["positive", "Stakeholder trust essential"], ["positive", "Crisis leadership needed"], ["negative", "Analysis heavily assisted"]] },
+        { title: "CFO", category: "Executive", risk: 18, timeline: "Financial analysis automated but strategy and stakeholder management human.", capabilities: "Financial modeling, forecasting, reporting, risk analysis.", factors: [["positive", "Strategic judgment"], ["positive", "Stakeholder relations"], ["negative", "Analysis automated"], ["negative", "Reporting generated"]] },
+        { title: "COO", category: "Executive", risk: 20, timeline: "Operations analytics improved but execution leadership remains human.", capabilities: "Performance dashboards, optimization suggestions, resource modeling.", factors: [["positive", "Execution leadership"], ["positive", "People management"], ["negative", "Analytics automated"], ["negative", "Reporting assisted"]] },
+        { title: "Therapist", category: "Healthcare", risk: 18, timeline: "AI chatbots exist for basic support but deep therapy remains human domain.", capabilities: "Mood tracking, CBT exercises, crisis resource provision, session notes.", factors: [["positive", "Human connection essential"], ["positive", "Complex emotional navigation"], ["positive", "Ethical judgment required"], ["negative", "Basic support tools exist"]] },
+        { title: "Psychologist", category: "Healthcare", risk: 20, timeline: "Assessment tools improving. Therapeutic relationship fundamentally human.", capabilities: "Administer tests, score assessments, track outcomes, suggest resources.", factors: [["positive", "Therapeutic relationship"], ["positive", "Complex interpretation"], ["positive", "Ethical judgment"], ["negative", "Assessment assisted"]] },
+        { title: "Emergency Medical Technician", category: "Healthcare", risk: 24, timeline: "Diagnostic aids improving but physical response in chaotic situations remains human.", capabilities: "Vitals analysis, protocol guidance, hospital communication, documentation.", factors: [["positive", "Physical response required"], ["positive", "Chaotic environments"], ["positive", "Split-second decisions"], ["negative", "Diagnostics assisted"]] },
+        { title: "Paramedic", category: "Healthcare", risk: 22, timeline: "Advanced diagnostics assisted but physical intervention human.", capabilities: "Vitals monitoring, protocol guidance, drug dosing, communication.", factors: [["positive", "Physical intervention"], ["positive", "Crisis response"], ["positive", "Unpredictable situations"], ["negative", "Diagnostics improving"]] },
+        { title: "Firefighter", category: "Emergency Services", risk: 15, timeline: "Drones assist but physical rescue in dangerous conditions remains human.", capabilities: "Thermal imaging, structural analysis, resource coordination, training simulation.", factors: [["positive", "Physical bravery required"], ["positive", "Unpredictable environments"], ["positive", "Team coordination critical"], ["negative", "Detection tools improving"]] },
+        { title: "Police Officer", category: "Law Enforcement", risk: 28, timeline: "Administrative and analysis tasks automate but community policing remains human.", capabilities: "Report writing, pattern analysis, facial recognition, dispatch optimization.", factors: [["positive", "Human judgment in confrontations"], ["positive", "Community relationships"], ["positive", "De-escalation skills"], ["negative", "Analysis tools advancing"]] },
+        { title: "Detective", category: "Law Enforcement", risk: 32, timeline: "Analysis tools improving but investigation judgment human.", capabilities: "Pattern analysis, background searches, evidence correlation, report generation.", factors: [["positive", "Investigation judgment"], ["positive", "Interview skills"], ["negative", "Analysis assisted"], ["negative", "Pattern matching improved"]] },
+        { title: "Priest/Minister", category: "Religious", risk: 8, timeline: "Spiritual guidance and community leadership fundamentally human.", capabilities: "Sermon research, scheduling, basic counseling resources, administration.", factors: [["positive", "Spiritual connection human"], ["positive", "Community leadership"], ["positive", "Ritual and ceremony"], ["negative", "Research can be assisted"]] },
+        { title: "Rabbi", category: "Religious", risk: 8, timeline: "Religious leadership and community guidance fundamentally human.", capabilities: "Research texts, prepare sermons, schedule events, administrative tasks.", factors: [["positive", "Spiritual leadership"], ["positive", "Community connection"], ["positive", "Ritual knowledge"], ["negative", "Research assisted"]] },
+        { title: "Imam", category: "Religious", risk: 8, timeline: "Religious leadership and community guidance fundamentally human.", capabilities: "Research texts, prepare sermons, schedule events, community coordination.", factors: [["positive", "Spiritual leadership"], ["positive", "Community connection"], ["positive", "Religious interpretation"], ["negative", "Research assisted"]] },
+        { title: "Childcare Worker", category: "Care", risk: 22, timeline: "Monitoring tools exist but hands-on care and nurturing remain human.", capabilities: "Activity suggestions, developmental tracking, safety monitoring, parent communication.", factors: [["positive", "Physical care required"], ["positive", "Emotional nurturing"], ["positive", "Unpredictable situations"], ["negative", "Monitoring tools exist"]] },
+        { title: "Nanny", category: "Care", risk: 18, timeline: "Monitoring assists but care and nurturing fundamentally human.", capabilities: "Activity planning, schedule management, communication with parents.", factors: [["positive", "Physical care essential"], ["positive", "Emotional bond"], ["positive", "Judgment in situations"], ["negative", "Scheduling assisted"]] },
+        { title: "Elderly Caregiver", category: "Care", risk: 20, timeline: "Monitoring technology growing but physical care and companionship human.", capabilities: "Health monitoring, medication reminders, activity suggestions, emergency alerts.", factors: [["positive", "Physical assistance"], ["positive", "Emotional companionship"], ["positive", "Complex needs"], ["negative", "Monitoring automated"]] },
+        { title: "Home Health Aide", category: "Healthcare", risk: 22, timeline: "Monitoring assists but physical care remains human.", capabilities: "Monitor vitals, track medications, report changes, schedule appointments.", factors: [["positive", "Physical care needed"], ["positive", "Emotional support"], ["positive", "Complex situations"], ["negative", "Monitoring improved"]] },
+        { title: "Construction Worker", category: "Trades", risk: 32, timeline: "Some prefab and 3D printing but on-site work in varied conditions remains human.", capabilities: "Site planning, material calculations, safety monitoring, progress tracking.", factors: [["positive", "Physical labor required"], ["positive", "Varied site conditions"], ["positive", "Team coordination"], ["negative", "Some prefab automation"]] },
+        { title: "Roofer", category: "Trades", risk: 28, timeline: "Estimation tools improving but physical installation remains human.", capabilities: "Estimate materials, calculate costs, plan layouts, schedule work.", factors: [["positive", "Physical work required"], ["positive", "Varied conditions"], ["positive", "Safety judgment"], ["negative", "Estimation assisted"]] },
+        { title: "Landscaper", category: "Trades", risk: 30, timeline: "Robotic mowers exist but design and complex work human.", capabilities: "Design suggestions, plant recommendations, maintenance scheduling, cost estimation.", factors: [["positive", "Physical work varied"], ["positive", "Creative design"], ["positive", "Site adaptation"], ["negative", "Mowing automated"]] },
+        { title: "Hairdresser", category: "Personal Services", risk: 18, timeline: "Client relationship and physical dexterity resist automation.", capabilities: "Style suggestions, appointment scheduling, inventory management.", factors: [["positive", "Physical dexterity required"], ["positive", "Personal relationship"], ["positive", "Creative expression"], ["negative", "Admin tasks automated"]] },
+        { title: "Barber", category: "Personal Services", risk: 18, timeline: "Physical skill and social interaction protect role.", capabilities: "Style suggestions, scheduling, inventory tracking.", factors: [["positive", "Physical skill required"], ["positive", "Social interaction"], ["positive", "Regular relationships"], ["negative", "Scheduling automated"]] },
+        { title: "Massage Therapist", category: "Healthcare", risk: 15, timeline: "Physical touch and intuition fundamental to role.", capabilities: "Appointment scheduling, treatment tracking, client preferences.", factors: [["positive", "Physical touch essential"], ["positive", "Intuitive adjustment"], ["positive", "Client relationships"], ["negative", "Scheduling automated"]] },
+        { title: "Chiropractor", category: "Healthcare", risk: 22, timeline: "Diagnostic tools improving but physical adjustment human.", capabilities: "Imaging analysis, treatment planning, progress tracking.", factors: [["positive", "Physical adjustment"], ["positive", "Patient assessment"], ["positive", "Treatment judgment"], ["negative", "Imaging analysis assisted"]] },
+        { title: "Lawyer", category: "Legal", risk: 38, timeline: "Research and document review automating. Courtroom advocacy and strategy remain human.", capabilities: "Legal research, document review, contract analysis, case prediction.", factors: [["negative", "Research highly automatable"], ["negative", "Document review AI-assisted"], ["positive", "Courtroom advocacy human"], ["positive", "Client counseling valued"]] },
+        { title: "Judge", category: "Legal", risk: 15, timeline: "Research assisted but judgment and proceedings fundamentally human.", capabilities: "Legal research, case analysis, precedent lookup, documentation.", factors: [["positive", "Judgment essential"], ["positive", "Proceedings human"], ["positive", "Ethical reasoning"], ["negative", "Research assisted"]] },
+        { title: "Doctor (General Practice)", category: "Healthcare", risk: 32, timeline: "Diagnostic AI assists but patient relationship and complex cases remain human.", capabilities: "Symptom analysis, diagnostic suggestions, treatment protocols, documentation.", factors: [["negative", "Diagnostics increasingly accurate"], ["negative", "Protocol guidance automated"], ["positive", "Patient trust essential"], ["positive", "Complex cases need judgment"]] },
+        { title: "Pediatrician", category: "Healthcare", risk: 28, timeline: "Diagnostics improving but child/parent relationships human.", capabilities: "Growth tracking, diagnostic assistance, vaccination scheduling, developmental screening.", factors: [["positive", "Child interaction"], ["positive", "Parent relationships"], ["positive", "Developmental judgment"], ["negative", "Screening assisted"]] },
+        { title: "Cardiologist", category: "Healthcare", risk: 30, timeline: "Image analysis AI-assisted but clinical judgment human.", capabilities: "Image analysis, risk modeling, treatment planning, monitoring.", factors: [["positive", "Clinical judgment"], ["positive", "Patient relationships"], ["negative", "Image analysis automated"], ["negative", "Risk modeling improved"]] },
+        { title: "Oncologist", category: "Healthcare", risk: 28, timeline: "Treatment planning assisted but patient care deeply human.", capabilities: "Treatment recommendations, clinical trial matching, outcome prediction.", factors: [["positive", "Patient relationships critical"], ["positive", "Treatment judgment"], ["negative", "Recommendations assisted"], ["negative", "Trial matching automated"]] },
+        { title: "Neurologist", category: "Healthcare", risk: 30, timeline: "Imaging analysis improving but complex diagnosis human.", capabilities: "Image analysis, symptom pattern matching, treatment planning.", factors: [["positive", "Complex diagnosis"], ["positive", "Patient relationships"], ["negative", "Imaging assisted"], ["negative", "Pattern matching improved"]] },
+        { title: "Dermatologist", category: "Healthcare", risk: 35, timeline: "Image analysis for screening effective. Complex cases and treatment human.", capabilities: "Analyze skin images, detect anomalies, classify conditions, track changes.", factors: [["negative", "Image analysis effective"], ["negative", "Screening automated"], ["positive", "Complex cases human"], ["positive", "Treatment judgment"]] },
+        { title: "Veterinarian", category: "Healthcare", risk: 25, timeline: "Diagnostic tools improving but animal handling and owner relations remain human.", capabilities: "Diagnostic assistance, treatment protocols, record keeping, client communication.", factors: [["positive", "Animal handling required"], ["positive", "Owner relationships"], ["positive", "Emergency response"], ["negative", "Diagnostics assisted"]] },
+        { title: "Dental Hygienist", category: "Healthcare", risk: 30, timeline: "Some procedures may automate but patient comfort and dexterity remain human.", capabilities: "X-ray analysis, patient records, treatment planning, appointment scheduling.", factors: [["positive", "Physical dexterity required"], ["positive", "Patient comfort"], ["positive", "Real-time adaptation"], ["negative", "Analysis tools improving"]] },
+        { title: "Dentist", category: "Healthcare", risk: 25, timeline: "Imaging analysis improved but procedures remain human.", capabilities: "Image analysis, treatment planning, procedure guidance, patient records.", factors: [["positive", "Procedure performance"], ["positive", "Patient relationships"], ["positive", "Complex judgment"], ["negative", "Imaging analysis improved"]] },
+        { title: "Oral Surgeon", category: "Healthcare", risk: 20, timeline: "Surgical planning assisted but execution human.", capabilities: "Imaging analysis, surgical planning, simulation, documentation.", factors: [["positive", "Surgical skill"], ["positive", "Patient safety"], ["positive", "Complex judgment"], ["negative", "Planning assisted"]] },
+        { title: "Pilot", category: "Transportation", risk: 35, timeline: "Autopilot handles most flight but takeoff, landing, and emergencies need humans.", capabilities: "Route optimization, autopilot monitoring, weather analysis, systems management.", factors: [["negative", "Autopilot highly capable"], ["negative", "Route planning automated"], ["positive", "Emergency response human"], ["positive", "Passenger trust factor"]] },
+        { title: "Air Traffic Controller", category: "Transportation", risk: 30, timeline: "Automation assisting but safety-critical decisions human.", capabilities: "Traffic prediction, conflict detection, route optimization, communication assistance.", factors: [["positive", "Safety critical"], ["positive", "Complex judgment"], ["negative", "Prediction assisted"], ["negative", "Monitoring automated"]] },
+        { title: "Ship Captain", category: "Transportation", risk: 28, timeline: "Navigation automated but command decisions human.", capabilities: "Route optimization, weather analysis, cargo planning, navigation assistance.", factors: [["positive", "Command responsibility"], ["positive", "Crisis management"], ["negative", "Navigation assisted"], ["negative", "Routing optimized"]] },
+        { title: "Midwife", category: "Healthcare", risk: 18, timeline: "Monitoring improved but birth support fundamentally human.", capabilities: "Fetal monitoring, risk assessment, documentation, resource coordination.", factors: [["positive", "Physical presence essential"], ["positive", "Emotional support"], ["positive", "Crisis judgment"], ["negative", "Monitoring assisted"]] },
+        { title: "Doula", category: "Healthcare", risk: 12, timeline: "Emotional and physical birth support fundamentally human.", capabilities: "Information resources, comfort techniques, communication assistance.", factors: [["positive", "Emotional support essential"], ["positive", "Physical presence"], ["positive", "Advocacy role"], ["negative", "Information accessible"]] },
+        { title: "Athletic Trainer", category: "Sports", risk: 28, timeline: "Analysis tools improving but physical treatment human.", capabilities: "Injury assessment, exercise programming, performance tracking, recovery monitoring.", factors: [["positive", "Physical treatment"], ["positive", "Athlete relationships"], ["negative", "Assessment assisted"], ["negative", "Tracking automated"]] },
+        { title: "Sports Coach", category: "Sports", risk: 25, timeline: "Analytics improved but motivation and strategy human.", capabilities: "Performance analysis, opponent scouting, play design, video breakdown.", factors: [["positive", "Motivation human"], ["positive", "Team dynamics"], ["negative", "Analytics automated"], ["negative", "Scouting assisted"]] },
+        { title: "Professional Athlete", category: "Sports", risk: 5, timeline: "Human performance is the product. AI assists training only.", capabilities: "Performance tracking, training optimization, recovery monitoring, opponent analysis.", factors: [["positive", "Human performance essential"], ["positive", "Entertainment value"], ["positive", "Athlete identity"], ["negative", "Training assisted"]] },
+        { title: "Actor", category: "Entertainment", risk: 25, timeline: "AI-generated content growing but human performance valued.", capabilities: "Generate scripts, assist memorization, voice synthesis, visual effects.", factors: [["positive", "Human connection valued"], ["positive", "Emotional authenticity"], ["negative", "Voice synthesis improving"], ["negative", "Visual effects advancing"]] },
+        { title: "Musician", category: "Entertainment", risk: 30, timeline: "AI composition growing but live performance and artistry protected.", capabilities: "Generate compositions, produce tracks, master audio, suggest arrangements.", factors: [["positive", "Live performance valued"], ["positive", "Artistic identity"], ["negative", "Composition possible"], ["negative", "Production assisted"]] },
+        { title: "Artist", category: "Creative", risk: 35, timeline: "AI art proliferating but human vision and concept still valued.", capabilities: "Generate images, suggest concepts, create variations, assist techniques.", factors: [["positive", "Artistic vision human"], ["positive", "Conceptual thinking"], ["negative", "Image generation capable"], ["negative", "Style transfer easy"]] },
+        { title: "Author", category: "Creative", risk: 40, timeline: "AI writes competently but distinctive voice protected.", capabilities: "Generate drafts, suggest plots, edit prose, research topics.", factors: [["positive", "Distinctive voice valued"], ["positive", "Deep themes human"], ["negative", "Drafting capable"], ["negative", "Research automated"]] },
+        { title: "Poet", category: "Creative", risk: 35, timeline: "AI generates poetry but authentic expression human.", capabilities: "Generate verses, suggest forms, rhyme assistance, style imitation.", factors: [["positive", "Authentic expression"], ["positive", "Emotional depth"], ["negative", "Form generation easy"], ["negative", "Style imitation possible"]] },
+        { title: "Dancer", category: "Entertainment", risk: 12, timeline: "Physical performance fundamentally human.", capabilities: "Choreography suggestions, music analysis, video feedback.", factors: [["positive", "Physical performance"], ["positive", "Emotional expression"], ["positive", "Human form essential"], ["negative", "Choreography assisted"]] },
+        { title: "Circus Performer", category: "Entertainment", risk: 10, timeline: "Physical skill and danger are the entertainment.", capabilities: "Training analysis, safety monitoring, routine planning.", factors: [["positive", "Physical skill essential"], ["positive", "Human danger element"], ["positive", "Live performance"], ["negative", "Training assisted"]] },
+        { title: "Stunt Performer", category: "Entertainment", risk: 28, timeline: "CGI and AI improving but practical stunts valued.", capabilities: "Safety analysis, sequence planning, wire calculations, video review.", factors: [["positive", "Physical performance"], ["positive", "Practical effects valued"], ["negative", "CGI improving"], ["negative", "AI faces possible"]] },
+        { title: "Diplomat", category: "Government", risk: 15, timeline: "Research assisted but negotiation fundamentally human.", capabilities: "Research positions, draft communications, analyze relationships, track agreements.", factors: [["positive", "Negotiation human"], ["positive", "Relationship building"], ["positive", "Cultural judgment"], ["negative", "Research assisted"]] },
+        { title: "Politician", category: "Government", risk: 12, timeline: "Analysis assisted but representation fundamentally human.", capabilities: "Research issues, draft speeches, analyze polls, track legislation.", factors: [["positive", "Representation human"], ["positive", "Trust and charisma"], ["positive", "Constituent relationships"], ["negative", "Research assisted"]] },
+        { title: "Military Officer", category: "Military", risk: 20, timeline: "Planning assisted but command responsibility human.", capabilities: "Tactical analysis, logistics planning, intelligence synthesis, simulation.", factors: [["positive", "Command judgment"], ["positive", "Leadership essential"], ["positive", "Ethical decisions"], ["negative", "Analysis assisted"]] },
+        { title: "Special Forces", category: "Military", risk: 15, timeline: "Equipment improving but human operators essential.", capabilities: "Intelligence analysis, mission planning, tactical simulation, equipment monitoring.", factors: [["positive", "Physical operation"], ["positive", "Split-second judgment"], ["positive", "Adaptability essential"], ["negative", "Planning assisted"]] }
+    ];
+
+    const searchInput = document.getElementById('job-search');
+    const suggestionsDiv = document.getElementById('search-suggestions');
+    const resultDiv = document.getElementById('risk-result');
+    const mostAtRiskDiv = document.getElementById('most-at-risk');
+
+    // Click handlers for at-risk cards
+    document.querySelectorAll('.at-risk-card').forEach(card => {
+        card.addEventListener('click', function() {
+            selectJob(this.dataset.job);
+        });
+    });
+
+    // Improved search with relevance scoring
+    function searchJobs(query) {
+        const q = query.toLowerCase().trim();
+        if (q.length < 2) return [];
+
+        return jobs.map(job => {
+            const title = job.title.toLowerCase();
+            const category = job.category.toLowerCase();
+            let score = 0;
+
+            // Exact match gets highest score
+            if (title === q) score = 100;
+            // Title starts with query
+            else if (title.startsWith(q)) score = 80;
+            // Word in title starts with query
+            else if (title.split(/[\s\/\-\(\)]+/).some(word => word.startsWith(q))) score = 60;
+            // Title contains query
+            else if (title.includes(q)) score = 40;
+            // Category matches
+            else if (category.startsWith(q)) score = 30;
+            else if (category.includes(q)) score = 20;
+
+            return { job, score };
+        })
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score || a.job.title.localeCompare(b.job.title))
+        .slice(0, 10)
+        .map(item => item.job);
+    }
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        const matches = searchJobs(query);
+
+        if (matches.length === 0) {
+            suggestionsDiv.classList.remove('active');
+            return;
+        }
+
+        suggestionsDiv.innerHTML = matches.map(job => {
+            const riskClass = job.risk >= 70 ? 'high' : job.risk >= 35 ? 'moderate' : 'low';
+            return `<div class="suggestion-item" data-job="${job.title}">
+                <span class="suggestion-job">${job.title}</span>
+                <span class="suggestion-risk ${riskClass}">${job.risk}% risk</span>
+            </div>`;
+        }).join('');
+
+        suggestionsDiv.classList.add('active');
+
+        suggestionsDiv.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const jobTitle = this.dataset.job;
+                selectJob(jobTitle);
+            });
+        });
+    });
+
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            const firstSuggestion = suggestionsDiv.querySelector('.suggestion-item');
+            if (firstSuggestion) {
+                selectJob(firstSuggestion.dataset.job);
+            }
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.job-search-container')) {
+            suggestionsDiv.classList.remove('active');
+        }
+    });
+
+    function selectJob(jobTitle) {
+        const job = jobs.find(j => j.title === jobTitle);
+        if (!job) return;
+
+        searchInput.value = job.title;
+        suggestionsDiv.classList.remove('active');
+
+        // Update display
+        document.getElementById('result-job-title').textContent = job.title;
+        document.getElementById('result-category').textContent = job.category;
+
+        const riskClass = job.risk >= 70 ? 'high' : job.risk >= 35 ? 'moderate' : 'low';
+        const riskLabel = job.risk >= 70 ? 'High Risk of AI Displacement' : job.risk >= 35 ? 'Moderate Risk of AI Displacement' : 'Low Risk of AI Displacement';
+
+        // Animate meter
+        const meterFill = document.getElementById('meter-fill');
+        const meterMarker = document.getElementById('meter-marker');
+        meterFill.className = 'meter-fill';
+        meterFill.classList.add(riskClass);
+
+        setTimeout(() => {
+            meterFill.style.width = job.risk + '%';
+            meterMarker.style.left = job.risk + '%';
+        }, 100);
+
+        // Update percentage
+        const percentEl = document.getElementById('risk-percentage');
+        percentEl.textContent = job.risk + '%';
+        percentEl.className = 'risk-percentage ' + riskClass;
+
+        document.getElementById('risk-label').textContent = riskLabel;
+
+        // Update details
+        document.getElementById('detail-timeline').textContent = job.timeline;
+        document.getElementById('detail-capabilities').textContent = job.capabilities;
+
+        // Update factors
+        const factorList = document.getElementById('factor-list');
+        factorList.innerHTML = job.factors.map(f =>
+            `<div class="factor-item"><span class="factor-icon ${f[0]}">${f[0] === 'negative' ? '−' : '+'}</span> ${f[1]}</div>`
+        ).join('');
+
+        // Hide most at risk section and show result
+        mostAtRiskDiv.classList.add('hidden');
+        resultDiv.classList.add('active');
+
+        // Scroll to result
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 });
 </script>
