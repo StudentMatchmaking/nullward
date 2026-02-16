@@ -19,6 +19,39 @@ title: Into the Unknown
 .hero h1, .hero-description, .hero-tagline { animation: fadeInUp 0.8s ease forwards; }
 .hero-description { animation-delay: 0.1s; }
 .hero-stat { animation: fadeInUp 0.8s ease forwards; animation-delay: 0.2s; opacity: 0; }
+
+/* Unemployment Visualization */
+.unemployment-viz { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
+.viz-header { margin-bottom: 2rem; }
+.viz-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.5rem; }
+.viz-subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+.viz-controls { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
+.control-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.control-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+.control-buttons { display: flex; gap: 0.5rem; }
+.control-btn { padding: 0.5rem 1rem; background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
+.control-btn:hover { border-color: var(--text-secondary); color: var(--text-secondary); }
+.control-btn.active { border-color: var(--text-primary); color: var(--text-primary); background: var(--bg-tertiary); }
+.chart-container { position: relative; height: 350px; margin-bottom: 1.5rem; }
+.viz-legend { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin-bottom: 1rem; }
+.legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); }
+.legend-color { width: 24px; height: 3px; }
+.legend-color.historical { background: #666; }
+.legend-color.minor { background: #4ade80; }
+.legend-color.moderate { background: #fbbf24; }
+.legend-color.severe { background: #ef4444; }
+.viz-note { font-size: 0.75rem; color: var(--text-muted); text-align: center; font-style: italic; }
+.viz-stat { display: flex; justify-content: center; gap: 3rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.stat-item { text-align: center; }
+.stat-value { font-family: 'Playfair Display', Georgia, serif; font-size: 2rem; color: var(--text-primary); }
+.stat-value.warning { color: #fbbf24; }
+.stat-value.danger { color: #ef4444; }
+.stat-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.25rem; }
+@media (max-width: 768px) {
+    .viz-controls { flex-direction: column; }
+    .viz-stat { flex-direction: column; gap: 1.5rem; }
+    .chart-container { height: 280px; }
+}
 </style>
 
 <section class="hero">
@@ -26,6 +59,60 @@ title: Into the Unknown
     <h1>The world is changing faster than anyone expects.</h1>
     <p class="hero-description">Raw perspectives on AI, economics, and the accelerating future. 99.9% of people are unaware of what's actually happening—and what's coming next.</p>
     <span class="hero-stat">Thinking in public since 2026</span>
+</section>
+
+<section class="unemployment-viz" id="forecast">
+    <div class="viz-header">
+        <h2 class="viz-title">Will Unemployment Ever Be This Low Again?</h2>
+        <p class="viz-subtitle">Historical data meets AI-adjusted projections. Select a scenario to see what's coming.</p>
+    </div>
+
+    <div class="viz-controls">
+        <div class="control-group">
+            <span class="control-label">Region</span>
+            <div class="control-buttons" id="region-controls">
+                <button class="control-btn active" data-region="us">United States</button>
+                <button class="control-btn" data-region="uk">United Kingdom</button>
+                <button class="control-btn" data-region="global">Global</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <span class="control-label">AI Impact Scenario</span>
+            <div class="control-buttons" id="scenario-controls">
+                <button class="control-btn" data-scenario="minor">Minor</button>
+                <button class="control-btn active" data-scenario="moderate">Moderate</button>
+                <button class="control-btn" data-scenario="severe">Severe</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="unemployment-chart"></canvas>
+    </div>
+
+    <div class="viz-legend">
+        <div class="legend-item"><span class="legend-color historical"></span> Historical</div>
+        <div class="legend-item"><span class="legend-color minor"></span> Minor AI Impact</div>
+        <div class="legend-item"><span class="legend-color moderate"></span> Moderate AI Impact</div>
+        <div class="legend-item"><span class="legend-color severe"></span> Severe AI Impact</div>
+    </div>
+
+    <div class="viz-stat">
+        <div class="stat-item">
+            <div class="stat-value" id="current-rate">4.1%</div>
+            <div class="stat-label">Current Rate</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value warning" id="projected-rate">8.2%</div>
+            <div class="stat-label">2031 Projection</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value danger" id="jobs-affected">24M</div>
+            <div class="stat-label">Jobs Affected</div>
+        </div>
+    </div>
+
+    <p class="viz-note">Projections based on IMF baseline forecasts adjusted for AI automation rates. Historical data: BLS, ONS, ILO.</p>
 </section>
 
 <section id="essays">
@@ -94,5 +181,211 @@ document.getElementById('subscribe-form').addEventListener('submit', function(e)
         msg.innerHTML = 'Check your email to confirm!';
         msg.style.color = '#4ade80';
     }, 500);
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('unemployment-chart').getContext('2d');
+
+    // Data: Historical (2020-2026) + Projections (2027-2031)
+    const years = ['2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031'];
+    const currentYearIndex = 6; // 2026
+
+    const data = {
+        us: {
+            historical: [8.1, 5.4, 3.6, 3.6, 4.0, 4.2, 4.1, null, null, null, null, null],
+            minor:      [null, null, null, null, null, null, 4.1, 4.6, 5.4, 6.2, 7.0, 7.8],
+            moderate:   [null, null, null, null, null, null, 4.1, 5.4, 7.0, 9.2, 11.5, 13.8],
+            severe:     [null, null, null, null, null, null, 4.1, 6.5, 9.8, 14.2, 19.5, 25.0],
+            current: 4.1,
+            workforce: 164000000
+        },
+        uk: {
+            historical: [4.6, 4.5, 3.7, 4.0, 4.2, 4.4, 4.6, null, null, null, null, null],
+            minor:      [null, null, null, null, null, null, 4.6, 5.1, 5.9, 6.8, 7.6, 8.4],
+            moderate:   [null, null, null, null, null, null, 4.6, 5.8, 7.5, 9.8, 12.2, 14.5],
+            severe:     [null, null, null, null, null, null, 4.6, 6.8, 10.2, 14.8, 20.5, 26.0],
+            current: 4.6,
+            workforce: 33000000
+        },
+        global: {
+            historical: [6.9, 6.2, 5.3, 5.0, 4.9, 4.9, 4.9, null, null, null, null, null],
+            minor:      [null, null, null, null, null, null, 4.9, 5.5, 6.4, 7.4, 8.4, 9.2],
+            moderate:   [null, null, null, null, null, null, 4.9, 6.2, 8.0, 10.5, 13.0, 15.5],
+            severe:     [null, null, null, null, null, null, 4.9, 7.2, 10.8, 15.5, 21.0, 27.0],
+            current: 4.9,
+            workforce: 3500000000
+        }
+    };
+
+    let currentRegion = 'us';
+    let currentScenario = 'moderate';
+
+    const chartColors = {
+        historical: '#666666',
+        minor: '#4ade80',
+        moderate: '#fbbf24',
+        severe: '#ef4444'
+    };
+
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [
+                {
+                    label: 'Historical',
+                    data: data[currentRegion].historical,
+                    borderColor: chartColors.historical,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointBackgroundColor: chartColors.historical,
+                    tension: 0.3,
+                    spanGaps: false
+                },
+                {
+                    label: 'Projection',
+                    data: data[currentRegion][currentScenario],
+                    borderColor: chartColors[currentScenario],
+                    backgroundColor: 'transparent',
+                    borderWidth: 3,
+                    borderDash: [5, 5],
+                    pointRadius: 4,
+                    pointBackgroundColor: chartColors[currentScenario],
+                    tension: 0.3,
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 1000,
+                easing: 'easeOutQuart'
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1a1a1a',
+                    titleColor: '#ffffff',
+                    bodyColor: '#a0a0a0',
+                    borderColor: '#333',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            if (context.raw === null) return null;
+                            return `Unemployment: ${context.raw}%`;
+                        }
+                    }
+                },
+                annotation: {
+                    annotations: {
+                        currentLine: {
+                            type: 'line',
+                            xMin: currentYearIndex,
+                            xMax: currentYearIndex,
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            label: {
+                                display: true,
+                                content: 'NOW',
+                                position: 'start',
+                                backgroundColor: 'transparent',
+                                color: '#666',
+                                font: { size: 10, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#666', font: { size: 11 } }
+                },
+                y: {
+                    min: 0,
+                    max: 30,
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: {
+                        color: '#666',
+                        font: { size: 11 },
+                        callback: function(value) { return value + '%'; }
+                    }
+                }
+            }
+        }
+    });
+
+    function updateChart() {
+        const regionData = data[currentRegion];
+
+        chart.data.datasets[0].data = regionData.historical;
+        chart.data.datasets[1].data = regionData[currentScenario];
+        chart.data.datasets[1].borderColor = chartColors[currentScenario];
+        chart.data.datasets[1].pointBackgroundColor = chartColors[currentScenario];
+
+        chart.update('active');
+
+        // Update stats
+        const currentRate = regionData.current;
+        const projectedRate = regionData[currentScenario][11];
+        const jobsAffected = Math.round((projectedRate - currentRate) / 100 * regionData.workforce);
+
+        document.getElementById('current-rate').textContent = currentRate + '%';
+        document.getElementById('projected-rate').textContent = projectedRate + '%';
+
+        const projectedEl = document.getElementById('projected-rate');
+        projectedEl.className = 'stat-value';
+        if (projectedRate >= 10) {
+            projectedEl.classList.add('danger');
+        } else if (projectedRate >= 6) {
+            projectedEl.classList.add('warning');
+        }
+
+        let jobsStr;
+        if (jobsAffected >= 1000000000) {
+            jobsStr = (jobsAffected / 1000000000).toFixed(1) + 'B';
+        } else if (jobsAffected >= 1000000) {
+            jobsStr = Math.round(jobsAffected / 1000000) + 'M';
+        } else {
+            jobsStr = Math.round(jobsAffected / 1000) + 'K';
+        }
+        document.getElementById('jobs-affected').textContent = jobsStr;
+    }
+
+    // Region controls
+    document.querySelectorAll('#region-controls .control-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#region-controls .control-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentRegion = this.dataset.region;
+            updateChart();
+        });
+    });
+
+    // Scenario controls
+    document.querySelectorAll('#scenario-controls .control-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#scenario-controls .control-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentScenario = this.dataset.scenario;
+            updateChart();
+        });
+    });
+
+    updateChart();
 });
 </script>
