@@ -36,7 +36,10 @@ permalink: /essays/
                 <div class="tags">{% for tag in post.data.tags %}{% if tag != "post" %}<span class="tag">{{ tag }}</span>{% endif %}{% endfor %}</div>
                 {% endif %}
             </div>
-            <span class="essay-meta">{{ post.date | dateFormat }}</span>
+            <div class="essay-meta-col">
+                <span class="essay-meta">{{ post.date | dateFormat }}</span>
+                <span class="essay-reading-time">{{ post.templateContent | readingTime }} min</span>
+            </div>
         </a>
         {% endfor %}
     </div>

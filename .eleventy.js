@@ -49,6 +49,15 @@ module.exports = function(eleventyConfig) {
     return array.slice(0, limit);
   });
 
+  // Reading time filter
+  eleventyConfig.addFilter("readingTime", function(content) {
+    const wordsPerMinute = 200;
+    const text = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    const wordCount = text.split(' ').length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return minutes;
+  });
+
   return {
     dir: {
       input: "src",
