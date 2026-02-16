@@ -33,6 +33,17 @@
             --border: #222222;
         }
 
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #ebebeb;
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --accent: #111111;
+            --border: #dddddd;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
@@ -58,6 +69,15 @@
         .nav-links { display: flex; gap: 2.5rem; list-style: none; }
         .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s ease; }
         .nav-links a:hover { color: var(--text-primary); }
+
+        .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-left: 1rem; }
+        .theme-toggle:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        .theme-toggle svg { width: 16px; height: 16px; }
+        .theme-toggle .sun-icon { display: none; }
+        .theme-toggle .moon-icon { display: block; }
+        [data-theme="light"] .theme-toggle .sun-icon { display: block; }
+        [data-theme="light"] .theme-toggle .moon-icon { display: none; }
+        [data-theme="light"] nav { background: rgba(255, 255, 255, 0.9); }
 
         section { padding: 6rem 2rem; max-width: 900px; margin: 0 auto; }
         .section-header { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
@@ -162,11 +182,21 @@
 <body>
     <nav>
         <div class="logo"><a href="/">nullward</a></div>
-        <ul class="nav-links">
-            <li><a href="/essays/">Essays</a></li>
-            <li><a href="/about/">About</a></li>
-            <li><a href="/#subscribe">Subscribe</a></li>
-        </ul>
+        <div style="display: flex; align-items: center;">
+            <ul class="nav-links">
+                <li><a href="/essays/">Essays</a></li>
+                <li><a href="/about/">About</a></li>
+                <li><a href="/#subscribe">Subscribe</a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </div>
     </nav>
 
     <div class="scroll-progress" id="scroll-progress"></div>
@@ -326,6 +356,30 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.control-btn, .newsletter-form button, .view-all-link').forEach(el => {
         el.classList.add('glow');
     });
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+
+    // Apply saved theme on load
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            if (newTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    }
 });
 </script>
 </body>
