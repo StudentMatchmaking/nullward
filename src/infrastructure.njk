@@ -1,0 +1,571 @@
+---
+layout: base.njk
+title: Global AI Infrastructure
+permalink: /infrastructure/
+---
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+.infra-header {
+    padding: 8rem 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.infra-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+.infra-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* Stats Bar */
+.infra-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.infra-stat {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    text-align: center;
+}
+.infra-stat-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+.infra-stat-value.operational { color: #22c55e; }
+.infra-stat-value.construction { color: #fbbf24; }
+.infra-stat-value.planned { color: #3b82f6; }
+.infra-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Map Container */
+.map-section {
+    padding: 0 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.map-container {
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    height: 500px;
+    margin-bottom: 1.5rem;
+}
+#map {
+    height: 100%;
+    width: 100%;
+    background: #1a1a2e;
+}
+
+/* Map Legend */
+.map-legend {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.legend-dot.operational { background: #22c55e; }
+.legend-dot.construction { background: #fbbf24; }
+.legend-dot.planned { background: #3b82f6; }
+
+/* Filters */
+.map-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.filter-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    padding: 0.4rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+.filter-btn:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-secondary);
+}
+.filter-btn.active {
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+}
+
+/* Data Center List */
+.dc-section {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.dc-section-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+.dc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.dc-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+}
+.dc-card:hover {
+    border-color: var(--text-muted);
+}
+.dc-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+.dc-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+.dc-location {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.dc-status {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+.dc-status.operational { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.dc-status.construction { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+.dc-status.planned { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.dc-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+.dc-detail-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.dc-detail-value {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Leaflet Customization */
+.leaflet-popup-content-wrapper {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 0;
+}
+.leaflet-popup-tip {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+}
+.leaflet-popup-content {
+    margin: 1rem;
+}
+.popup-title {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.popup-company {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+.popup-detail {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .infra-stats { grid-template-columns: repeat(2, 1fr); }
+    .map-container { height: 350px; }
+    .dc-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<header class="infra-header">
+    <h1 class="infra-title">Global AI Infrastructure</h1>
+    <p class="infra-subtitle">Real-time map of AI data centers powering the future. The physical footprint of artificial intelligence.</p>
+
+    <div class="infra-stats">
+        <div class="infra-stat">
+            <div class="infra-stat-value operational" id="stat-operational">0</div>
+            <div class="infra-stat-label">Operational</div>
+        </div>
+        <div class="infra-stat">
+            <div class="infra-stat-value construction" id="stat-construction">0</div>
+            <div class="infra-stat-label">Under Construction</div>
+        </div>
+        <div class="infra-stat">
+            <div class="infra-stat-value planned" id="stat-planned">0</div>
+            <div class="infra-stat-label">Planned</div>
+        </div>
+        <div class="infra-stat">
+            <div class="infra-stat-value" id="stat-capacity">0</div>
+            <div class="infra-stat-label">Total GW Capacity</div>
+        </div>
+    </div>
+</header>
+
+<section class="map-section">
+    <div class="map-filters">
+        <div class="filter-group">
+            <span class="filter-label">Status</span>
+            <div class="filter-buttons" id="status-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="operational">Operational</button>
+                <button class="filter-btn" data-filter="construction">Construction</button>
+                <button class="filter-btn" data-filter="planned">Planned</button>
+            </div>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">Company</span>
+            <div class="filter-buttons" id="company-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="Google">Google</button>
+                <button class="filter-btn" data-filter="Microsoft">Microsoft</button>
+                <button class="filter-btn" data-filter="Amazon">Amazon</button>
+                <button class="filter-btn" data-filter="Meta">Meta</button>
+                <button class="filter-btn" data-filter="OpenAI">OpenAI</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+
+    <div class="map-legend">
+        <div class="legend-item">
+            <span class="legend-dot operational"></span>
+            <span>Operational</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-dot construction"></span>
+            <span>Under Construction</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-dot planned"></span>
+            <span>Planned</span>
+        </div>
+    </div>
+</section>
+
+<section class="dc-section">
+    <h2 class="dc-section-title">All Data Centers</h2>
+    <div class="dc-grid" id="dc-grid"></div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // AI Data Center Database
+    const dataCenters = [
+        // Google
+        { name: "Google Mayes County", location: "Oklahoma, USA", lat: 36.3, lng: -95.2, company: "Google", status: "operational", capacity: 600, year: 2023, purpose: "AI Training & Cloud", gpus: "TPU v5" },
+        { name: "Google Council Bluffs", location: "Iowa, USA", lat: 41.26, lng: -95.86, company: "Google", status: "operational", capacity: 450, year: 2009, purpose: "AI Training & Cloud", gpus: "TPU v4/v5" },
+        { name: "Google The Dalles", location: "Oregon, USA", lat: 45.6, lng: -121.18, company: "Google", status: "operational", capacity: 350, year: 2006, purpose: "AI Training & Cloud", gpus: "TPU v4" },
+        { name: "Google Hamina", location: "Finland", lat: 60.57, lng: 27.2, company: "Google", status: "operational", capacity: 350, year: 2011, purpose: "AI Training", gpus: "TPU v4" },
+        { name: "Google Taiwan", location: "Changhua, Taiwan", lat: 24.08, lng: 120.54, company: "Google", status: "construction", capacity: 300, year: 2025, purpose: "AI Training", gpus: "TPU v5" },
+        { name: "Google Wulf", location: "Germany", lat: 50.94, lng: 6.96, company: "Google", status: "planned", capacity: 400, year: 2027, purpose: "AI Training", gpus: "TPU v6" },
+
+        // Microsoft
+        { name: "Microsoft Phoenix", location: "Arizona, USA", lat: 33.45, lng: -112.07, company: "Microsoft", status: "operational", capacity: 500, year: 2022, purpose: "Azure AI & OpenAI", gpus: "H100" },
+        { name: "Microsoft Quincy", location: "Washington, USA", lat: 47.23, lng: -119.85, company: "Microsoft", status: "operational", capacity: 400, year: 2007, purpose: "Azure AI", gpus: "A100/H100" },
+        { name: "Microsoft Dublin", location: "Ireland", lat: 53.35, lng: -6.26, company: "Microsoft", status: "operational", capacity: 300, year: 2009, purpose: "Azure AI Europe", gpus: "A100" },
+        { name: "Microsoft Wisconsin", location: "Wisconsin, USA", lat: 42.73, lng: -87.82, company: "Microsoft", status: "construction", capacity: 700, year: 2026, purpose: "AI Supercomputer", gpus: "H100/B100" },
+        { name: "Microsoft Sweden", location: "Gavle, Sweden", lat: 60.67, lng: 17.14, company: "Microsoft", status: "construction", capacity: 400, year: 2025, purpose: "Azure AI Nordic", gpus: "H100" },
+        { name: "Microsoft UK", location: "London, UK", lat: 51.5, lng: -0.12, company: "Microsoft", status: "planned", capacity: 500, year: 2027, purpose: "Azure AI UK", gpus: "B100" },
+
+        // Amazon/AWS
+        { name: "AWS US-East-1", location: "Virginia, USA", lat: 38.95, lng: -77.45, company: "Amazon", status: "operational", capacity: 800, year: 2006, purpose: "AWS AI/ML", gpus: "Trainium/Inferentia" },
+        { name: "AWS Oregon", location: "Oregon, USA", lat: 45.84, lng: -119.7, company: "Amazon", status: "operational", capacity: 500, year: 2011, purpose: "AWS AI/ML", gpus: "Trainium" },
+        { name: "AWS Ireland", location: "Dublin, Ireland", lat: 53.42, lng: -6.42, company: "Amazon", status: "operational", capacity: 350, year: 2007, purpose: "AWS Europe", gpus: "Inferentia" },
+        { name: "AWS Singapore", location: "Singapore", lat: 1.35, lng: 103.82, company: "Amazon", status: "operational", capacity: 300, year: 2010, purpose: "AWS Asia", gpus: "Trainium" },
+        { name: "AWS Mississippi", location: "Mississippi, USA", lat: 32.35, lng: -90.0, company: "Amazon", status: "construction", capacity: 600, year: 2026, purpose: "AWS AI Expansion", gpus: "Trainium2" },
+        { name: "AWS Saudi Arabia", location: "Riyadh, Saudi Arabia", lat: 24.71, lng: 46.67, company: "Amazon", status: "planned", capacity: 450, year: 2027, purpose: "AWS Middle East AI", gpus: "Trainium2" },
+
+        // Meta
+        { name: "Meta Prineville", location: "Oregon, USA", lat: 44.3, lng: -120.83, company: "Meta", status: "operational", capacity: 400, year: 2011, purpose: "AI Research", gpus: "H100" },
+        { name: "Meta Lulea", location: "Sweden", lat: 65.58, lng: 22.15, company: "Meta", status: "operational", capacity: 350, year: 2013, purpose: "AI Training", gpus: "A100/H100" },
+        { name: "Meta Fort Worth", location: "Texas, USA", lat: 32.75, lng: -97.33, company: "Meta", status: "operational", capacity: 450, year: 2016, purpose: "AI Training", gpus: "H100" },
+        { name: "Meta DeKalb", location: "Illinois, USA", lat: 41.93, lng: -88.75, company: "Meta", status: "construction", capacity: 500, year: 2026, purpose: "Llama Training", gpus: "H100/B100" },
+        { name: "Meta Temple", location: "Texas, USA", lat: 31.1, lng: -97.34, company: "Meta", status: "planned", capacity: 600, year: 2027, purpose: "AGI Research", gpus: "B100" },
+
+        // OpenAI
+        { name: "OpenAI San Francisco", location: "California, USA", lat: 37.77, lng: -122.42, company: "OpenAI", status: "operational", capacity: 200, year: 2020, purpose: "GPT Research", gpus: "H100" },
+        { name: "OpenAI Phoenix (via MS)", location: "Arizona, USA", lat: 33.55, lng: -112.1, company: "OpenAI", status: "operational", capacity: 350, year: 2023, purpose: "GPT-5 Training", gpus: "H100" },
+        { name: "OpenAI Wisconsin (Stargate)", location: "Wisconsin, USA", lat: 43.0, lng: -89.4, company: "OpenAI", status: "construction", capacity: 1000, year: 2026, purpose: "Stargate Supercomputer", gpus: "B200" },
+        { name: "OpenAI Texas (Stargate II)", location: "Texas, USA", lat: 32.0, lng: -97.0, company: "OpenAI", status: "planned", capacity: 1500, year: 2028, purpose: "AGI Training", gpus: "Next-gen" },
+
+        // xAI
+        { name: "xAI Memphis", location: "Tennessee, USA", lat: 35.15, lng: -90.05, company: "xAI", status: "operational", capacity: 500, year: 2024, purpose: "Grok Training", gpus: "H100" },
+        { name: "xAI Memphis Expansion", location: "Tennessee, USA", lat: 35.2, lng: -90.0, company: "xAI", status: "construction", capacity: 800, year: 2026, purpose: "Grok-3 Training", gpus: "B200" },
+
+        // NVIDIA
+        { name: "NVIDIA DGX Cloud Santa Clara", location: "California, USA", lat: 37.39, lng: -121.96, company: "NVIDIA", status: "operational", capacity: 300, year: 2023, purpose: "DGX Cloud", gpus: "H100/B100" },
+        { name: "NVIDIA Israel", location: "Tel Aviv, Israel", lat: 32.08, lng: 34.78, company: "NVIDIA", status: "construction", capacity: 400, year: 2026, purpose: "AI Research", gpus: "B100" },
+
+        // International
+        { name: "Alibaba Zhangbei", location: "Hebei, China", lat: 41.15, lng: 114.7, company: "Alibaba", status: "operational", capacity: 600, year: 2016, purpose: "AI Cloud", gpus: "Custom" },
+        { name: "Tencent Guizhou", location: "Guizhou, China", lat: 26.65, lng: 106.63, company: "Tencent", status: "operational", capacity: 500, year: 2018, purpose: "AI Research", gpus: "Custom" },
+        { name: "ByteDance Shanghai", location: "Shanghai, China", lat: 31.23, lng: 121.47, company: "ByteDance", status: "operational", capacity: 400, year: 2022, purpose: "AI Training", gpus: "A100" },
+        { name: "Oracle Austin", location: "Texas, USA", lat: 30.27, lng: -97.74, company: "Oracle", status: "operational", capacity: 350, year: 2021, purpose: "OCI AI", gpus: "A100/H100" },
+        { name: "CoreWeave New Jersey", location: "New Jersey, USA", lat: 40.72, lng: -74.17, company: "CoreWeave", status: "operational", capacity: 250, year: 2023, purpose: "GPU Cloud", gpus: "H100" },
+        { name: "CoreWeave Texas", location: "Texas, USA", lat: 29.76, lng: -95.37, company: "CoreWeave", status: "construction", capacity: 400, year: 2025, purpose: "GPU Cloud", gpus: "H100/B100" },
+        { name: "Lambda Labs Utah", location: "Utah, USA", lat: 40.76, lng: -111.89, company: "Lambda Labs", status: "operational", capacity: 150, year: 2022, purpose: "GPU Cloud", gpus: "H100" },
+    ];
+
+    // Initialize map
+    const map = L.map('map', {
+        center: [30, 0],
+        zoom: 2,
+        minZoom: 2,
+        maxZoom: 10,
+        worldCopyJump: true
+    });
+
+    // Dark map tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Custom markers
+    const markerColors = {
+        operational: '#22c55e',
+        construction: '#fbbf24',
+        planned: '#3b82f6'
+    };
+
+    function createMarker(dc) {
+        const color = markerColors[dc.status];
+        const icon = L.divIcon({
+            className: 'custom-marker',
+            html: `<div style="
+                width: 14px;
+                height: 14px;
+                background: ${color};
+                border: 2px solid #fff;
+                border-radius: 50%;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            "></div>`,
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+
+        const marker = L.marker([dc.lat, dc.lng], { icon: icon });
+
+        marker.bindPopup(`
+            <div class="popup-title">${dc.name}</div>
+            <div class="popup-company">${dc.company}</div>
+            <div class="popup-detail"><strong>Location:</strong> ${dc.location}</div>
+            <div class="popup-detail"><strong>Status:</strong> ${dc.status.charAt(0).toUpperCase() + dc.status.slice(1)}</div>
+            <div class="popup-detail"><strong>Capacity:</strong> ${dc.capacity} MW</div>
+            <div class="popup-detail"><strong>Purpose:</strong> ${dc.purpose}</div>
+            <div class="popup-detail"><strong>GPUs:</strong> ${dc.gpus}</div>
+        `);
+
+        marker.dcData = dc;
+        return marker;
+    }
+
+    let markers = [];
+    let markersLayer = L.layerGroup().addTo(map);
+
+    function renderMarkers(filters = { status: 'all', company: 'all' }) {
+        markersLayer.clearLayers();
+        markers = [];
+
+        dataCenters.forEach(dc => {
+            if (filters.status !== 'all' && dc.status !== filters.status) return;
+            if (filters.company !== 'all' && dc.company !== filters.company) return;
+
+            const marker = createMarker(dc);
+            marker.addTo(markersLayer);
+            markers.push(marker);
+        });
+
+        updateStats(filters);
+        renderCards(filters);
+    }
+
+    // Stats
+    function updateStats(filters) {
+        let operational = 0, construction = 0, planned = 0, totalCapacity = 0;
+
+        dataCenters.forEach(dc => {
+            if (filters.status !== 'all' && dc.status !== filters.status) return;
+            if (filters.company !== 'all' && dc.company !== filters.company) return;
+
+            if (dc.status === 'operational') operational++;
+            if (dc.status === 'construction') construction++;
+            if (dc.status === 'planned') planned++;
+            totalCapacity += dc.capacity;
+        });
+
+        animateValue('stat-operational', operational);
+        animateValue('stat-construction', construction);
+        animateValue('stat-planned', planned);
+        animateValue('stat-capacity', (totalCapacity / 1000).toFixed(1));
+    }
+
+    function animateValue(id, target) {
+        const el = document.getElementById(id);
+        const isFloat = String(target).includes('.');
+        const targetNum = parseFloat(target);
+        const duration = 800;
+        const start = performance.now();
+
+        function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = eased * targetNum;
+
+            el.textContent = isFloat ? current.toFixed(1) : Math.floor(current);
+
+            if (progress < 1) requestAnimationFrame(update);
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    // Cards
+    function renderCards(filters) {
+        const grid = document.getElementById('dc-grid');
+        grid.innerHTML = '';
+
+        dataCenters.forEach(dc => {
+            if (filters.status !== 'all' && dc.status !== filters.status) return;
+            if (filters.company !== 'all' && dc.company !== filters.company) return;
+
+            const card = document.createElement('div');
+            card.className = 'dc-card';
+            card.innerHTML = `
+                <div class="dc-card-header">
+                    <div>
+                        <div class="dc-name">${dc.name}</div>
+                        <div class="dc-location">${dc.location}</div>
+                    </div>
+                    <span class="dc-status ${dc.status}">${dc.status}</span>
+                </div>
+                <div class="dc-details">
+                    <div>
+                        <div class="dc-detail-label">Company</div>
+                        <div class="dc-detail-value">${dc.company}</div>
+                    </div>
+                    <div>
+                        <div class="dc-detail-label">Capacity</div>
+                        <div class="dc-detail-value">${dc.capacity} MW</div>
+                    </div>
+                    <div>
+                        <div class="dc-detail-label">GPUs</div>
+                        <div class="dc-detail-value">${dc.gpus}</div>
+                    </div>
+                    <div>
+                        <div class="dc-detail-label">Year</div>
+                        <div class="dc-detail-value">${dc.year}</div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                map.setView([dc.lat, dc.lng], 6);
+                markers.find(m => m.dcData === dc)?.openPopup();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
+    // Filters
+    let currentFilters = { status: 'all', company: 'all' };
+
+    document.getElementById('status-filters').addEventListener('click', (e) => {
+        if (!e.target.matches('.filter-btn')) return;
+        document.querySelectorAll('#status-filters .filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilters.status = e.target.dataset.filter;
+        renderMarkers(currentFilters);
+    });
+
+    document.getElementById('company-filters').addEventListener('click', (e) => {
+        if (!e.target.matches('.filter-btn')) return;
+        document.querySelectorAll('#company-filters .filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilters.company = e.target.dataset.filter;
+        renderMarkers(currentFilters);
+    });
+
+    // Initial render
+    renderMarkers(currentFilters);
+});
+</script>
