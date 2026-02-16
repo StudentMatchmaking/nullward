@@ -12,6 +12,9 @@ title: Into the Unknown
 .about-content { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 .about-content p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.9; }
 .about-content p strong { color: var(--text-primary); font-weight: 500; }
+.view-all { text-align: center; margin-top: 2rem; }
+.view-all-link { display: inline-block; padding: 0.75rem 1.5rem; border: 1px solid var(--border); color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; letter-spacing: 0.05em; transition: all 0.2s ease; }
+.view-all-link:hover { border-color: var(--text-primary); color: var(--text-primary); }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .hero h1, .hero-description, .hero-tagline { animation: fadeInUp 0.8s ease forwards; }
 .hero-description { animation-delay: 0.1s; }
@@ -28,7 +31,7 @@ title: Into the Unknown
 <section id="essays">
     <div class="section-header">Recent Essays</div>
     <div class="essays-list">
-        {% for post in collections.posts | reverse %}
+        {% for post in collections.posts | limit(3) %}
         <a href="{{ post.url }}" class="essay-item">
             <div>
                 <h3 class="essay-title">{{ post.data.title }}</h3>
@@ -40,6 +43,9 @@ title: Into the Unknown
             <span class="essay-meta">{{ post.date | dateFormat }}</span>
         </a>
         {% endfor %}
+    </div>
+    <div class="view-all">
+        <a href="/essays/" class="view-all-link">View all essays →</a>
     </div>
 </section>
 

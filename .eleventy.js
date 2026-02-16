@@ -44,6 +44,11 @@ module.exports = function(eleventyConfig) {
     return content.substring(0, excerptLength).trim() + "...";
   });
 
+  // Limit filter for arrays
+  eleventyConfig.addFilter("limit", function(array, limit) {
+    return array.slice(0, limit);
+  });
+
   return {
     dir: {
       input: "src",

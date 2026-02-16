@@ -4,22 +4,31 @@ title: Essays
 permalink: /essays/
 ---
 
-{% block extra_styles %}
-.page-header { padding: 10rem 2rem 2rem; max-width: 900px; margin: 0 auto; }
+<style>
+.page-header { padding: 8rem 2rem 2rem; max-width: 900px; margin: 0 auto; }
 .page-title { font-family: 'Playfair Display', Georgia, serif; font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; }
-.page-description { color: var(--text-secondary); font-size: 1.1rem; }
-{% endblock %}
+.page-description { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
+.tag-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.tag-filter { font-size: 0.75rem; padding: 0.4rem 0.75rem; background: transparent; border: 1px solid var(--border); color: var(--text-muted); text-decoration: none; letter-spacing: 0.05em; transition: all 0.2s ease; cursor: pointer; }
+.tag-filter:hover, .tag-filter.active { color: var(--text-primary); border-color: var(--text-primary); background: var(--bg-tertiary); }
+.essay-item.hidden { display: none; }
+</style>
 
-{% block content %}
 <header class="page-header">
     <h1 class="page-title">Essays</h1>
     <p class="page-description">Thinking through AI, economics, and accelerating change.</p>
+    <div class="tag-filters">
+        <button class="tag-filter active" data-tag="all">All</button>
+        {% for tag in collections.tagList %}
+        <button class="tag-filter" data-tag="{{ tag }}">{{ tag }}</button>
+        {% endfor %}
+    </div>
 </header>
 
 <section>
     <div class="essays-list">
-        {% for post in collections.posts | reverse %}
-        <a href="{{ post.url }}" class="essay-item">
+        {% for post in collections.posts %}
+        <a href="{{ post.url }}" class="essay-item" data-tags="{% for tag in post.data.tags %}{% if tag != 'post' %}{{ tag }} {% endif %}{% endfor %}">
             <div>
                 <h3 class="essay-title">{{ post.data.title }}</h3>
                 <p class="essay-excerpt">{{ post.data.excerpt }}</p>
@@ -32,4 +41,32 @@ permalink: /essays/
         {% endfor %}
     </div>
 </section>
-{% endblock %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filters = document.querySelectorAll('.tag-filter');
+    const essays = document.querySelectorAll('.essay-item');
+
+    filters.forEach(filter => {
+        filter.addEventListener('click', function() {
+            const tag = this.dataset.tag;
+
+            filters.forEach(f => f.classList.remove('active'));
+            this.classList.add('active');
+
+            essays.forEach(essay => {
+                if (tag === 'all') {
+                    essay.classList.remove('hidden');
+                } else {
+                    const essayTags = essay.dataset.tags || '';
+                    if (essayTags.includes(tag)) {
+                        essay.classList.remove('hidden');
+                    } else {
+                        essay.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+});
+</script>
