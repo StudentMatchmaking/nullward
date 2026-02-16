@@ -4,7 +4,7 @@ title: Into the Unknown
 ---
 
 <style>
-.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 2rem 4rem; max-width: 900px; margin: 0 auto; }
+.hero { min-height: calc(100vh - 70px); display: flex; flex-direction: column; justify-content: center; padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
 .hero-tagline { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
 .hero h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; line-height: 1.2; margin-bottom: 2rem; letter-spacing: -0.02em; }
 .hero-description { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 3rem; line-height: 1.8; }
@@ -125,7 +125,98 @@ title: Into the Unknown
 @media (max-width: 768px) {
     .at-risk-jobs { grid-template-columns: 1fr; }
 }
+
+/* AI News Ticker */
+.news-ticker {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 0;
+    overflow: hidden;
+    position: relative;
+    margin-top: 70px;
+}
+.ticker-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, var(--bg-secondary) 80%, transparent);
+    padding: 0.6rem 1rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #4ade80;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.ticker-pulse {
+    width: 6px;
+    height: 6px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+.ticker-track {
+    display: flex;
+    animation: scroll 60s linear infinite;
+    padding-left: 120px;
+}
+.ticker-track:hover {
+    animation-play-state: paused;
+}
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.ticker-item {
+    flex-shrink: 0;
+    padding: 0 2rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.ticker-item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s ease;
+}
+.ticker-item a:hover {
+    color: var(--text-primary);
+}
+.ticker-source {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.ticker-divider {
+    color: var(--border);
+    font-size: 0.7rem;
+}
+.ticker-loading {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding-left: 120px;
+}
 </style>
+
+<div class="news-ticker" id="news-ticker">
+    <div class="ticker-label">
+        <span class="ticker-pulse"></span>
+        AI News
+    </div>
+    <div class="ticker-track" id="ticker-track">
+        <span class="ticker-loading">Loading latest AI news...</span>
+    </div>
+</div>
 
 <section class="hero">
     <span class="hero-tagline">Into the Unknown</span>
@@ -281,7 +372,10 @@ title: Into the Unknown
                 <div class="tags">{% for tag in post.data.tags %}{% if tag != "post" %}<span class="tag">{{ tag }}</span>{% endif %}{% endfor %}</div>
                 {% endif %}
             </div>
-            <span class="essay-meta">{{ post.date | dateFormat }}</span>
+            <div class="essay-meta-col">
+                <span class="essay-meta">{{ post.date | dateFormat }}</span>
+                <span class="essay-reading-time">{{ post.templateContent | readingTime }} min</span>
+            </div>
         </a>
         {% endfor %}
     </div>
@@ -310,6 +404,78 @@ title: Into the Unknown
         <p class="newsletter-note" id="form-message">Powered by <a href="https://nullward.substack.com" target="_blank">Substack</a></p>
     </div>
 </section>
+
+<script>
+// AI News Ticker
+(async function() {
+    const tickerTrack = document.getElementById('ticker-track');
+
+    // Fallback headlines if RSS fails - links to search results for fresh content
+    const fallbackItems = [
+        { title: 'Latest: OpenAI and GPT developments', source: 'Search', link: 'https://news.google.com/search?q=OpenAI+GPT&hl=en-US' },
+        { title: 'Latest: Google DeepMind breakthroughs', source: 'Search', link: 'https://news.google.com/search?q=Google+DeepMind&hl=en-US' },
+        { title: 'Latest: Anthropic Claude updates', source: 'Search', link: 'https://news.google.com/search?q=Anthropic+Claude&hl=en-US' },
+        { title: 'Latest: AI regulation news', source: 'Search', link: 'https://news.google.com/search?q=AI+regulation&hl=en-US' },
+        { title: 'Latest: Microsoft AI and Copilot', source: 'Search', link: 'https://news.google.com/search?q=Microsoft+Copilot+AI&hl=en-US' },
+        { title: 'Latest: NVIDIA and AI chips', source: 'Search', link: 'https://news.google.com/search?q=NVIDIA+AI+chips&hl=en-US' },
+        { title: 'Latest: AI in healthcare', source: 'Search', link: 'https://news.google.com/search?q=AI+healthcare&hl=en-US' },
+        { title: 'Latest: Meta AI and Llama', source: 'Search', link: 'https://news.google.com/search?q=Meta+AI+Llama&hl=en-US' }
+    ];
+
+    const RSS_FEEDS = [
+        { url: 'https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en', source: 'Google News' },
+        { url: 'https://www.wired.com/feed/tag/ai/latest/rss', source: 'Wired' }
+    ];
+
+    async function fetchFeed(feedUrl, source) {
+        try {
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (data.status === 'ok' && data.items && data.items.length > 0) {
+                return data.items.slice(0, 8).map(item => ({
+                    title: item.title.length > 80 ? item.title.substring(0, 80) + '...' : item.title,
+                    link: item.link,
+                    source: source
+                }));
+            }
+        } catch (e) {
+            console.log('Feed error:', source, e);
+        }
+        return [];
+    }
+
+    function buildTicker(items) {
+        const buildItems = (items) => items.map(item => `
+            <div class="ticker-item">
+                <span class="ticker-source">${item.source}</span>
+                <a href="${item.link}" target="_blank" rel="noopener">${item.title}</a>
+            </div>
+            <span class="ticker-divider">•</span>
+        `).join('');
+        tickerTrack.innerHTML = buildItems(items) + buildItems(items);
+    }
+
+    try {
+        const allFeeds = await Promise.all(
+            RSS_FEEDS.map(feed => fetchFeed(feed.url, feed.source))
+        );
+
+        let allItems = allFeeds.flat();
+
+        if (allItems.length < 3) {
+            // Use fallback if not enough items
+            buildTicker(fallbackItems);
+        } else {
+            // Shuffle and limit
+            allItems = allItems.sort(() => Math.random() - 0.5).slice(0, 10);
+            buildTicker(allItems);
+        }
+    } catch (e) {
+        buildTicker(fallbackItems);
+    }
+})();
+</script>
 
 <script>
 document.getElementById('subscribe-form').addEventListener('submit', function(e) {
