@@ -91,6 +91,61 @@
         .footer-logo { font-size: 0.9rem; font-weight: 500; letter-spacing: 0.1em; margin-bottom: 1rem; }
         .footer-tagline { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.1em; }
 
+        /* Scroll Progress Bar */
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #4ade80, #22d3ee, #a78bfa); z-index: 1000; width: 0%; transition: width 0.1s linear; }
+
+        /* Scroll Animations - only apply to elements explicitly marked */
+        [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        [data-reveal].visible { opacity: 1; transform: translateY(0); }
+        [data-reveal="left"] { opacity: 0; transform: translateX(-30px); }
+        [data-reveal="left"].visible { opacity: 1; transform: translateX(0); }
+        [data-reveal="right"] { opacity: 0; transform: translateX(30px); }
+        [data-reveal="right"].visible { opacity: 1; transform: translateX(0); }
+        [data-reveal="scale"] { opacity: 0; transform: scale(0.95); }
+        [data-reveal="scale"].visible { opacity: 1; transform: scale(1); }
+
+        /* Glow effects */
+        .glow { position: relative; }
+        .glow::before { content: ''; position: absolute; inset: -1px; background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 211, 238, 0.2), rgba(167, 139, 250, 0.2)); border-radius: inherit; z-index: -1; opacity: 0; transition: opacity 0.4s ease; filter: blur(20px); }
+        .glow:hover::before { opacity: 1; }
+
+        /* Card hover lift effect */
+        .hover-lift { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+
+        /* Gradient text */
+        .gradient-text { background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        /* Animated underline */
+        .animated-underline { position: relative; display: inline-block; }
+        .animated-underline::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--text-primary); transition: width 0.3s ease; }
+        .animated-underline:hover::after { width: 100%; }
+
+        /* Pulse animation for important elements */
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+
+        /* Floating animation */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .float { animation: float 4s ease-in-out infinite; }
+
+        /* Shimmer effect for loading states */
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .shimmer { background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%); background-size: 200% 100%; animation: shimmer 2s infinite; }
+
+        /* Smooth section transitions - only for sections with data-animate */
+        section[data-animate] { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        section[data-animate].in-view { opacity: 1; transform: translateY(0); }
+
+        /* Nav hide/show on scroll */
+        nav { transition: transform 0.3s ease, background 0.3s ease; }
+        nav.nav-hidden { transform: translateY(-100%); }
+        nav.nav-scrolled { background: rgba(10, 10, 10, 0.95); }
+
+        /* Cursor glow effect */
+        .cursor-glow { pointer-events: none; position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(74, 222, 128, 0.03) 0%, transparent 70%); transform: translate(-50%, -50%); z-index: 0; transition: opacity 0.3s ease; opacity: 0; }
+        body:hover .cursor-glow { opacity: 1; }
+
         @media (max-width: 768px) {
             nav { padding: 1rem 1.5rem; }
             .nav-links { gap: 1.5rem; }
@@ -112,11 +167,164 @@
         </ul>
     </nav>
 
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
     {{ content | safe }}
-    <footer>
+    <footer data-reveal>
         <div class="footer-logo">nullward</div>
         <div class="footer-tagline">Into the Unknown</div>
     </footer>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Scroll Progress Bar
+    const scrollProgress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        scrollProgress.style.width = scrollPercent + '%';
+    });
+
+    // Cursor Glow Effect (desktop only)
+    const cursorGlow = document.getElementById('cursor-glow');
+    if (window.innerWidth > 768) {
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+    }
+
+    // Nav hide/show on scroll
+    const nav = document.querySelector('nav');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        if (currentScroll > 100) {
+            nav.classList.add('nav-scrolled');
+            if (currentScroll > lastScroll && currentScroll > 300) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+        } else {
+            nav.classList.remove('nav-scrolled');
+            nav.classList.remove('nav-hidden');
+        }
+        lastScroll = currentScroll;
+    });
+
+    // Intersection Observer for reveal animations
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.1
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                entry.target.classList.add('in-view');
+            }
+        });
+    }, observerOptions);
+
+    // Add data-reveal attributes to elements we want to animate
+    document.querySelectorAll('.section-header').forEach(el => el.setAttribute('data-reveal', ''));
+    document.querySelectorAll('.viz-header').forEach(el => el.setAttribute('data-reveal', ''));
+    document.querySelectorAll('.newsletter').forEach(el => el.setAttribute('data-reveal', 'scale'));
+    document.querySelectorAll('.about-content p').forEach((el, i) => {
+        el.setAttribute('data-reveal', '');
+        el.style.transitionDelay = (i * 0.15) + 's';
+    });
+
+    // Observe all elements with data-reveal
+    document.querySelectorAll('[data-reveal], section[data-animate], footer[data-reveal]').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Animate numbers when they come into view
+    const animateNumber = (el, target, duration = 1500) => {
+        const start = 0;
+        const startTime = performance.now();
+
+        const updateNumber = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(start + (target - start) * easeOut);
+
+            if (el.dataset.suffix) {
+                el.textContent = current + el.dataset.suffix;
+            } else if (el.dataset.prefix) {
+                el.textContent = el.dataset.prefix + current;
+            } else {
+                el.textContent = current;
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            }
+        };
+
+        requestAnimationFrame(updateNumber);
+    };
+
+    // Observe stat values for number animation
+    const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.animated) {
+                entry.target.dataset.animated = 'true';
+                const text = entry.target.textContent;
+                const match = text.match(/(\d+\.?\d*)/);
+                if (match) {
+                    const num = parseFloat(match[1]);
+                    const suffix = text.replace(match[1], '');
+                    entry.target.dataset.suffix = suffix;
+                    animateNumber(entry.target, num);
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-value, .risk-percentage, .at-risk-percent').forEach(el => {
+        statObserver.observe(el);
+    });
+
+    // Parallax effect for hero elements
+    const heroElements = document.querySelectorAll('.hero h1, .hero-description');
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        heroElements.forEach((el, i) => {
+            const speed = 0.1 + (i * 0.05);
+            el.style.transform = `translateY(${scrolled * speed}px)`;
+            el.style.opacity = Math.max(0, 1 - (scrolled / 600));
+        });
+    });
+
+    // Add hover-lift to cards (not essay-item to keep them simple)
+    document.querySelectorAll('.at-risk-card, .risk-detail').forEach(el => {
+        el.classList.add('hover-lift');
+    });
+
+    // Staggered fade-in for essay items
+    document.querySelectorAll('.essay-item').forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        }, 100 + (i * 150));
+    });
+
+    // Add glow effect to interactive elements
+    document.querySelectorAll('.control-btn, .newsletter-form button, .view-all-link').forEach(el => {
+        el.classList.add('glow');
+    });
+});
+</script>
 </body>
 </html>
