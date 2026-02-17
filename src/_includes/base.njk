@@ -31,7 +31,7 @@
     <meta name="twitter:title" content="{% if title %}{{ title }} — Nullward{% else %}Nullward{% endif %}">
     <meta name="twitter:description" content="{{ excerpt or description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
     <meta name="twitter:image" content="https://nullward.pro/og-image.png">
-    <meta name="twitter:creator" content="@nullward">
+    <meta name="twitter:creator" content="@nullward_pro">
 
     <!-- JSON-LD Organization Schema -->
     <script type="application/ld+json">
@@ -46,7 +46,7 @@
             "@type": "Person",
             "name": "Owen Redman"
         },
-        "sameAs": []
+        "sameAs": ["https://x.com/nullward_pro"]
     }
     </script>
 
@@ -203,6 +203,8 @@
         footer { padding: 4rem 2rem; text-align: center; border-top: 1px solid var(--border); }
         .footer-logo { font-size: 0.9rem; font-weight: 500; letter-spacing: 0.1em; margin-bottom: 1rem; }
         .footer-tagline { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.1em; }
+        .footer-social { display: inline-flex; align-items: center; justify-content: center; margin-top: 1.5rem; color: var(--text-muted); transition: color 0.2s ease; }
+        .footer-social:hover { color: var(--text-primary); }
 
         /* Scroll Progress Bar */
         .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, #4ade80, #22d3ee, #a78bfa); z-index: 1000; width: 0%; transition: width 0.1s linear; }
@@ -279,6 +281,7 @@
                 <li><a href="/infrastructure/">AI Map</a></li>
                 <li><a href="/about/">About</a></li>
                 <li><a href="/#subscribe">Subscribe</a></li>
+                <li><a href="https://x.com/nullward_pro" target="_blank" rel="noopener">X</a></li>
             </ul>
             <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                 <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -303,6 +306,11 @@
     <footer data-reveal>
         <div class="footer-logo">nullward</div>
         <div class="footer-tagline">Into the Unknown</div>
+        <a href="https://x.com/nullward_pro" target="_blank" rel="noopener" class="footer-social" aria-label="Follow on X">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+        </a>
     </footer>
 
 <script>
