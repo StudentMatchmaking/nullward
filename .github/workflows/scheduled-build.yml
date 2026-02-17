@@ -1,0 +1,34 @@
+name: Scheduled Build
+
+on:
+  schedule:
+    # Run daily at 00:05 UTC (just after midnight to publish scheduled posts)
+    - cron: '5 0 * * *'
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages rebuild
+        run: |
+          # This empty commit triggers Cloudflare Pages to rebuild
+          echo "Triggering scheduled rebuild for $(date -u +%Y-%m-%d)"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create trigger commit
+        run: |
+          # Update a timestamp file to trigger rebuild
+          echo "Last scheduled build: $(date -u +%Y-%m-%dT%H:%M:%SZ)" > .last-build
+          git add .last-build
+          git commit -m "Scheduled rebuild: $(date -u +%Y-%m-%d)" || echo "No changes to commit"
+          git push || echo "Nothing to push"

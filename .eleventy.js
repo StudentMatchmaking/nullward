@@ -8,11 +8,14 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/*.ico");
     eleventyConfig.addPassthroughCopy("src/site.webmanifest");
 
-  // Create a collection of all posts
+  // Create a collection of all posts (filters out future-dated posts for scheduling)
   eleventyConfig.addCollection("posts", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("src/posts/*.md").sort((a, b) => {
-      return b.date - a.date; // Sort by date, newest first
-    });
+    const now = new Date();
+    return collectionApi.getFilteredByGlob("src/posts/*.md")
+      .filter(post => post.date <= now) // Only include posts with dates in the past
+      .sort((a, b) => {
+        return b.date - a.date; // Sort by date, newest first
+      });
   });
 
   // Create collections for each tag
