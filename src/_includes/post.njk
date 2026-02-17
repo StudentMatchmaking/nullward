@@ -66,6 +66,57 @@ layout: base.njk
 @media (min-width: 1200px) {
     .back-to-top { bottom: 2rem; right: 2rem; }
 }
+
+/* Engagement Section */
+.engagement { padding: 2rem; max-width: 900px; margin: 0 auto; }
+.engagement-actions { display: flex; align-items: center; gap: 1.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+.like-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+.like-button:hover { border-color: var(--text-muted); color: var(--text-secondary); }
+.like-button.liked { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+.like-button svg { width: 18px; height: 18px; transition: transform 0.2s ease; }
+.like-button:hover svg { transform: scale(1.1); }
+.like-button.liked svg { fill: #ef4444; }
+.like-count { font-weight: 500; }
+.share-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+.share-button:hover { border-color: var(--text-muted); color: var(--text-secondary); }
+.share-button svg { width: 18px; height: 18px; }
+
+/* Comments Section */
+.comments-section { padding: 0 2rem 4rem; max-width: 900px; margin: 0 auto; }
+.comments-title { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+.giscus { margin-top: 1rem; }
+.giscus-frame { color-scheme: dark; }
+[data-theme="light"] .giscus-frame { color-scheme: light; }
+
+@media (max-width: 768px) {
+    .engagement { padding: 1.5rem; }
+    .engagement-actions { flex-wrap: wrap; gap: 1rem; }
+    .comments-section { padding: 0 1.5rem 3rem; }
+}
 </style>
 
 <div class="reading-progress" id="reading-progress"></div>
@@ -120,6 +171,62 @@ layout: base.njk
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
     </svg>
 </button>
+
+<div class="engagement">
+    <div class="engagement-actions">
+        <button class="like-button" id="like-button" data-slug="{{ title | slugify }}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            <span class="like-count" id="like-count">0</span>
+        </button>
+        <button class="share-button" id="share-button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+            Share
+        </button>
+    </div>
+</div>
+
+<section class="comments-section">
+    <h3 class="comments-title">Discussion</h3>
+    <div class="giscus"></div>
+    <script>
+    // Load Giscus with correct theme
+    function loadGiscus() {
+        const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        const giscusScript = document.createElement('script');
+        giscusScript.src = 'https://giscus.app/client.js';
+        giscusScript.setAttribute('data-repo', 'StudentMatchmaking/nullward');
+        giscusScript.setAttribute('data-repo-id', 'R_kgDORHHApA');
+        giscusScript.setAttribute('data-category', 'Comments');
+        giscusScript.setAttribute('data-category-id', 'DIC_kwDORHHApM4C2n0Q');
+        giscusScript.setAttribute('data-mapping', 'pathname');
+        giscusScript.setAttribute('data-strict', '0');
+        giscusScript.setAttribute('data-reactions-enabled', '1');
+        giscusScript.setAttribute('data-emit-metadata', '0');
+        giscusScript.setAttribute('data-input-position', 'top');
+        giscusScript.setAttribute('data-theme', theme);
+        giscusScript.setAttribute('data-lang', 'en');
+        giscusScript.setAttribute('data-loading', 'lazy');
+        giscusScript.crossOrigin = 'anonymous';
+        giscusScript.async = true;
+        document.querySelector('.giscus').appendChild(giscusScript);
+    }
+    loadGiscus();
+
+    // Update Giscus theme when toggled
+    const observer = new MutationObserver(() => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (iframe) {
+            const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            iframe.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+        }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    </script>
+</section>
 
 <section id="subscribe">
     <div class="newsletter">
@@ -217,6 +324,105 @@ document.addEventListener('DOMContentLoaded', function() {
     backToTop.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // Like Button
+    const likeButton = document.getElementById('like-button');
+    const likeCount = document.getElementById('like-count');
+    const postSlug = likeButton?.dataset.slug;
+
+    // Check if already liked (localStorage)
+    const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+    if (likedPosts.includes(postSlug)) {
+        likeButton?.classList.add('liked');
+    }
+
+    // Fetch current like count
+    const LIKES_API = 'https://nullward-likes.redman-owen-a2b.workers.dev';
+
+    async function fetchLikes() {
+        try {
+            const res = await fetch(`${LIKES_API}/likes/${postSlug}`);
+            const data = await res.json();
+            if (likeCount) likeCount.textContent = data.count || 0;
+        } catch (e) {
+            console.log('Likes API not configured yet');
+        }
+    }
+
+    async function toggleLike() {
+        const isLiked = likeButton.classList.contains('liked');
+        const action = isLiked ? 'unlike' : 'like';
+
+        try {
+            const res = await fetch(`${LIKES_API}/${action}/${postSlug}`, { method: 'POST' });
+            const data = await res.json();
+            likeCount.textContent = data.count || 0;
+
+            if (action === 'like') {
+                likeButton.classList.add('liked');
+                likedPosts.push(postSlug);
+            } else {
+                likeButton.classList.remove('liked');
+                const idx = likedPosts.indexOf(postSlug);
+                if (idx > -1) likedPosts.splice(idx, 1);
+            }
+            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+        } catch (e) {
+            // Fallback: just toggle UI locally
+            if (action === 'like') {
+                likeButton.classList.add('liked');
+                likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                likedPosts.push(postSlug);
+            } else {
+                likeButton.classList.remove('liked');
+                likeCount.textContent = Math.max(0, parseInt(likeCount.textContent) - 1);
+                const idx = likedPosts.indexOf(postSlug);
+                if (idx > -1) likedPosts.splice(idx, 1);
+            }
+            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+        }
+    }
+
+    if (likeButton) {
+        fetchLikes();
+        likeButton.addEventListener('click', toggleLike);
+    }
+
+    // Share Button
+    const shareButton = document.getElementById('share-button');
+    if (shareButton) {
+        shareButton.addEventListener('click', async () => {
+            const shareData = {
+                title: document.title,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (e) {
+                    // User cancelled
+                }
+            } else {
+                // Fallback: copy to clipboard
+                await navigator.clipboard.writeText(window.location.href);
+                shareButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Copied!
+                `;
+                setTimeout(() => {
+                    shareButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                        Share
+                    `;
+                }, 2000);
+            }
+        });
+    }
 
     // Newsletter form
     document.getElementById('subscribe-form').addEventListener('submit', function(e) {
