@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if title %}{{ title }} — {% endif %}Nullward</title>
-    <meta name="description" content="{{ description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
+    <meta name="description" content="{{ excerpt or description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
     <meta name="google-site-verification" content="8PTW4aSMbIwRTF0dtWmnaaw5IGnR03QP579tsCjVem4">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Owen Redman">
@@ -16,7 +16,7 @@
     <meta property="og:type" content="{% if layout == 'post.njk' %}article{% else %}website{% endif %}">
     <meta property="og:url" content="https://nullward.pro{{ page.url }}">
     <meta property="og:title" content="{% if title %}{{ title }} — Nullward{% else %}Nullward{% endif %}">
-    <meta property="og:description" content="{{ description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
+    <meta property="og:description" content="{{ excerpt or description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
     <meta property="og:image" content="https://nullward.pro/android-chrome-512x512.png">
     <meta property="og:site_name" content="Nullward">
     <meta property="og:locale" content="en_US">
@@ -29,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://nullward.pro{{ page.url }}">
     <meta name="twitter:title" content="{% if title %}{{ title }} — Nullward{% else %}Nullward{% endif %}">
-    <meta name="twitter:description" content="{{ description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
+    <meta name="twitter:description" content="{{ excerpt or description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
     <meta name="twitter:image" content="https://nullward.pro/android-chrome-512x512.png">
     <meta name="twitter:creator" content="@nullward">
 
