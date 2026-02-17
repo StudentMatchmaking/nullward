@@ -1,0 +1,34 @@
+# Nullward robots.txt
+# https://nullward.pro
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# AI Crawlers - explicitly allowed for GEO
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://nullward.pro/sitemap.xml
+
+# Crawl-delay (optional, be polite)
+Crawl-delay: 1

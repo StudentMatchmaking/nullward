@@ -6,6 +6,64 @@
     <title>{% if title %}{{ title }} — {% endif %}Nullward</title>
     <meta name="description" content="{{ description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
     <meta name="google-site-verification" content="8PTW4aSMbIwRTF0dtWmnaaw5IGnR03QP579tsCjVem4">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Owen Redman">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nullward.pro{{ page.url }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% if layout == 'post.njk' %}article{% else %}website{% endif %}">
+    <meta property="og:url" content="https://nullward.pro{{ page.url }}">
+    <meta property="og:title" content="{% if title %}{{ title }} — Nullward{% else %}Nullward{% endif %}">
+    <meta property="og:description" content="{{ description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
+    <meta property="og:image" content="https://nullward.pro/android-chrome-512x512.png">
+    <meta property="og:site_name" content="Nullward">
+    <meta property="og:locale" content="en_US">
+    {% if date %}
+    <meta property="article:published_time" content="{{ date.toISOString() }}">
+    <meta property="article:author" content="Owen Redman">
+    {% endif %}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://nullward.pro{{ page.url }}">
+    <meta name="twitter:title" content="{% if title %}{{ title }} — Nullward{% else %}Nullward{% endif %}">
+    <meta name="twitter:description" content="{{ description or 'Raw perspectives on AI, economics, and the accelerating future. The world is changing faster than anyone expects.' }}">
+    <meta name="twitter:image" content="https://nullward.pro/android-chrome-512x512.png">
+    <meta name="twitter:creator" content="@nullward">
+
+    <!-- JSON-LD Organization Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Nullward",
+        "url": "https://nullward.pro",
+        "logo": "https://nullward.pro/android-chrome-512x512.png",
+        "description": "Raw perspectives on AI, economics, and the accelerating future",
+        "founder": {
+            "@type": "Person",
+            "name": "Owen Redman"
+        },
+        "sameAs": []
+    }
+    </script>
+
+    <!-- JSON-LD WebSite Schema for sitelinks search -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Nullward",
+        "url": "https://nullward.pro",
+        "description": "Raw perspectives on AI, economics, and the accelerating future",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Nullward"
+        }
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

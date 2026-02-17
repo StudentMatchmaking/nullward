@@ -2,6 +2,38 @@
 layout: base.njk
 ---
 
+<!-- JSON-LD Article Schema for SEO and GEO -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://nullward.pro{{ page.url }}"
+    },
+    "headline": "{{ title }}",
+    "description": "{{ excerpt or description }}",
+    "image": "https://nullward.pro/android-chrome-512x512.png",
+    "author": {
+        "@type": "Person",
+        "name": "Owen Redman",
+        "url": "https://nullward.pro/about/"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Nullward",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://nullward.pro/android-chrome-512x512.png"
+        }
+    },
+    "datePublished": "{{ date.toISOString() }}",
+    "dateModified": "{{ date.toISOString() }}",
+    "keywords": "{% for tag in tags %}{% if tag != 'post' %}{{ tag }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}",
+    "articleSection": "Essays"
+}
+</script>
+
 <style>
 /* Reading Progress Bar */
 .reading-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #4ade80, #22d3ee); z-index: 1001; width: 0%; transition: width 0.1s linear; }

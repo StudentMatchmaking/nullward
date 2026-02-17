@@ -2,6 +2,8 @@ module.exports = function(eleventyConfig) {
   // Copy static assets
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("public");
+  eleventyConfig.addPassthroughCopy("src/robots.txt");
+  eleventyConfig.addPassthroughCopy({"src/og-image.svg": "og-image.png"}); // SVG as og-image
     // Favicon files
     eleventyConfig.addPassthroughCopy("src/*.svg");
     eleventyConfig.addPassthroughCopy("src/*.png");
