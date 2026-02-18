@@ -73,19 +73,16 @@ Every output feeds back into the Persistent Memory Layer. The Curator indexes it
 
 The secret weapon is a purpose-built domain-specific language for context.
 
-Consider this scenario. An AI needs context about a previous project discussion. The raw context might be ~200 tokens:
+Consider this scenario. An AI needs context about a previous project discussion. The raw context might be around 200 tokens:
 
 > "In our meeting on January 15th, we discussed the website redesign project. Sarah proposed using React for the frontend, which the team agreed to after considering Vue and Angular. The backend will use Python with FastAPI. We decided against Node.js because the team has more Python experience. The deadline is March 30th, but Tom flagged that the API integration might push this to mid-April."
 
-The DSL equivalent, at ~40 tokens:
+The DSL equivalent compresses this to around 40 tokens while preserving all key information:
 
-```
-CTX:proj/web-redesign{
-  frontend:React[decided:Jan15,vs:Vue,Angular],
-  backend:Python/FastAPI[reason:team-exp,rejected:Node],
-  deadline:Mar30[risk:API-integ,revised:mid-Apr,flagged-by:Tom]
-}
-```
+- Project: web-redesign
+- Frontend: React (decided Jan 15, considered Vue and Angular)
+- Backend: Python/FastAPI (team experience, rejected Node)
+- Deadline: March 30 (risk: API integration, revised: mid-April, flagged by Tom)
 
 That's an 80% reduction while preserving all decisions, reasoning, alternatives considered, risks, and attributions.
 
