@@ -10,14 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Cloudflare Pages rebuild
-        run: |
-          # This empty commit triggers Cloudflare Pages to rebuild
-          echo "Triggering scheduled rebuild for $(date -u +%Y-%m-%d)"
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
@@ -25,10 +21,12 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
+      - name: Pull latest changes
+        run: git pull origin main
+
       - name: Create trigger commit
         run: |
-          # Update a timestamp file to trigger rebuild
           echo "Last scheduled build: $(date -u +%Y-%m-%dT%H:%M:%SZ)" > .last-build
           git add .last-build
           git commit -m "Scheduled rebuild: $(date -u +%Y-%m-%d)" || echo "No changes to commit"
-          git push || echo "Nothing to push"
+          git push origin main
