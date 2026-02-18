@@ -80,7 +80,11 @@ Consider this scenario. An AI needs context about a previous project discussion.
 The DSL equivalent, at ~40 tokens:
 
 ```
-CTX:proj/web-redesign{frontend:React[decided:Jan15,vs:Vue,Angular],backend:Python/FastAPI[reason:team-exp,rejected:Node],deadline:Mar30[risk:API-integ,revised:mid-Apr,flagged-by:Tom]}
+CTX:proj/web-redesign{
+  frontend:React[decided:Jan15,vs:Vue,Angular],
+  backend:Python/FastAPI[reason:team-exp,rejected:Node],
+  deadline:Mar30[risk:API-integ,revised:mid-Apr,flagged-by:Tom]
+}
 ```
 
 That's an 80% reduction while preserving all decisions, reasoning, alternatives considered, risks, and attributions.
