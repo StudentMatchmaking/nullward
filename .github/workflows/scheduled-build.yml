@@ -10,22 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure Git
+      - name: Trigger Cloudflare Pages rebuild
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
-      - name: Create and push trigger commit
-        run: |
-          git pull --rebase origin main
-          echo "Last scheduled build: $(date -u +%Y-%m-%dT%H:%M:%SZ)" > .last-build
-          git add .last-build
-          git commit -m "Scheduled rebuild: $(date -u +%Y-%m-%d)" || exit 0
-          git push origin main
+          if [ -n "$DEPLOY_HOOK_URL" ]; then
+            curl -X POST "$DEPLOY_HOOK_URL"
+            echo "Cloudflare rebuild triggered"
+          else
+            echo "No deploy hook configured. Add CLOUDFLARE_DEPLOY_HOOK_URL secret."
+            exit 1
+          fi
