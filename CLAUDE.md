@@ -305,6 +305,7 @@ When asked to post to X, follow these guidelines:
 - Include 1-2 relevant hashtags max (#AI, #Tech, #FutureOfWork)
 - Numbers and stats perform well
 - Contrarian takes get engagement
+- NEVER use em-dashes (—) in tweets. Use periods or commas instead.
 
 **Example Thread Structure:**
 ```
