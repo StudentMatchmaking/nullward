@@ -338,20 +338,23 @@ Full essay: https://nullward.pro/essays/why-95-of-tech-companies-will-disappear/
 
 ---
 
-## Pending Tasks
+## X Promotion Tracker
 
-### Mobile Code Block Overflow Fix (Ready to Push)
-**Status**: Committed locally, needs `git push origin main`
+Track which blog posts have been promoted on X with threads:
 
-**What was done**:
-- Fixed mobile overflow issue on the "Context Windows" blog post (`src/posts/infinite-context-architecture.md`)
-- The long DSL code example was causing horizontal page overflow on mobile, requiring zoom out
-- Updated `src/_includes/post.njk` with CSS fixes:
-  - Added `max-width: 100%` and `box-sizing: border-box` to `.post-content pre`
-  - Added `overflow-x: auto` to code inside pre blocks for horizontal scroll within the block
-  - Added `overflow-x: hidden` to `.post-body` and `.post-content` on mobile
-  - Reduced code block padding on mobile
+| Post | Date Published | X Thread Posted | Notes |
+|------|----------------|-----------------|-------|
+| Why 95% of Tech Companies Will Disappear | 2026-01-28 | ✅ | Launch post |
+| Unemployment Has Never Been This Low | 2026-01-15 | ❌ | Needs thread |
+| The Naivety of AI Can't Be Creative | 2026-02-01 | ❌ | Needs thread |
+| Context Windows Are a Solved Problem | 2026-02-16 | ❌ | Needs thread |
+| Anthropic's Billion-Dollar Blind Spot | 2026-02-16 | ❌ | Needs thread |
+| The Last Human Advantage | 2026-02-18 | ❌ | Needs thread |
+| Why an AI Winter Is Mathematically Impossible | 2026-02-19 | ✅ | Thread created 2026-02-19 |
 
-**To deploy**: Run `git push origin main` from terminal (SSH key required)
-
-**After push**: Cloudflare Pages auto-deploys in ~30 seconds. Verify at https://nullward.pro/essays/context-windows-are-a-solved-problem-the-architecture-nobodys-building/
+### Upcoming Scheduled Posts
+| Post | Scheduled Date |
+|------|----------------|
+| The Google Dependency | 2026-02-20 |
+| The Automation Debt Bomb | 2026-02-21 |
+| Your Brain Is Obsolete | 2026-02-22 |
