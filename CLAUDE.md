@@ -7,6 +7,17 @@ when changes are pushed to the main branch.
 - Production: https://nullward.pro
 - Cloudflare Pages: https://nullward.pages.dev
 - Repository: github.com/StudentMatchmaking/nullward
+- X (Twitter): https://x.com/nullward_pro (@nullward_pro)
+
+## Brand Assets
+- Profile picture: `src/nullward-profile.png` (1024x1024, dark gradient with "N" logo)
+- X Banner: `src/nullward-banner.png` (1500x500)
+- OG Image: `src/og-image.png` (1200x630, for social sharing link previews)
+- Favicon: `src/favicon.svg` / `src/favicon.ico`
+
+## Analytics
+- Google Analytics 4 Measurement ID: G-NXXVGP233Y
+- Google Search Console: Configured for nullward.pro
 
 ## Tech Stack
 - Static site generator: 11ty (Eleventy)
@@ -30,6 +41,11 @@ nullward/
     tags.njk          # Tags page
   .eleventy.js        # 11ty configuration
   package.json        # Dependencies
+
+## Sitemap Behavior
+- **Blog posts**: Automatically added to sitemap via `collections.posts` loop in `sitemap.njk`
+- **Static pages**: Must be manually added to `sitemap.njk` (e.g., `/about/`, `/essays/`, `/infrastructure/`, `/tags/`)
+- When adding a new standalone page (not a blog post), remember to add it to the sitemap
 
 ## Target Audience Persona
 
@@ -228,8 +244,11 @@ Use consistent tags for topic clustering:
 
 ### Scheduled Posts
 - Posts with future dates are automatically hidden until their publish date
-- GitHub Actions rebuilds the site daily at 00:05 UTC
+- GitHub Actions triggers a Cloudflare rebuild daily at 00:05 UTC via Deploy Hook
 - To schedule a post: just set a future date in the frontmatter
+- **Setup required**: The `CLOUDFLARE_DEPLOY_HOOK_URL` secret must be set in GitHub repo settings
+  - Create deploy hook in Cloudflare: Pages → nullward → Settings → Builds & deployments → Deploy hooks
+  - Add the URL as a secret in GitHub: Settings → Secrets and variables → Actions → New repository secret
 
 ---
 
@@ -248,3 +267,91 @@ When creating any new content, verify:
 - [ ] Related internal links to other posts
 - [ ] Appropriate tags assigned (2-5 tags)
 - [ ] Content directly answers questions readers might ask
+
+---
+
+## X (Twitter) Posting Integration
+
+### Current Status: Manual Posting
+X API access requires a paid developer account ($100/month for Basic tier). Until that's set up:
+- Post manually to @nullward_pro
+- Use the content guidelines below for consistent voice
+- n8n workflow template saved at `/nullward/n8n-workflows/nullward-x-poster.json` (ready for when API is available)
+
+### Future Automation (Requires X API)
+Once X API access is purchased, configure the n8n workflow with:
+```
+X_WEBHOOK_URL: [PASTE YOUR WEBHOOK URL HERE]
+```
+
+### Content Repurposing Strategy
+
+When asked to post to X, follow these guidelines:
+
+**For Blog Post Promotion:**
+1. Create a hook tweet (compelling first line from essay)
+2. Create a thread summarizing key points (5-7 tweets)
+3. End with link to full essay
+
+**Thread Format:**
+1. **Tweet 1**: Bold claim or hook (no link yet)
+2. **Tweets 2-5**: Key insights, one per tweet
+3. **Tweet 6**: "Here's what this means for you..."
+4. **Final Tweet**: Call to action + link to full essay
+
+**Tweet Writing Style:**
+- Direct and punchy (match Nullward voice)
+- Use line breaks for readability
+- Include 1-2 relevant hashtags max (#AI, #Tech, #FutureOfWork)
+- Numbers and stats perform well
+- Contrarian takes get engagement
+
+**Example Thread Structure:**
+```
+Tweet 1: "95% of tech companies will disappear in the next decade.
+
+Not because they'll fail. Because they'll become irrelevant.
+
+Here's why 🧵"
+
+Tweet 2: "Traditional tech moats are evaporating:
+- Network effects? AI simulates them
+- Switching costs? AI makes migration trivial
+- Data advantages? Foundation models level the playing field"
+
+Tweet 3: "What used to require a team of 50 engineers can now be done by one person with AI tools.
+
+When execution becomes trivially easy, execution is no longer a moat."
+
+...
+
+Final Tweet: "The companies that survive will be those building moats AI deepens, not fills.
+
+Full essay: https://nullward.pro/essays/why-95-of-tech-companies-will-disappear/"
+```
+
+### Posting Frequency
+- 1-2 tweets per day minimum
+- 1 thread per new blog post
+- Engage with replies when relevant
+- Best posting times: 9am, 12pm, 6pm GMT
+
+---
+
+## Pending Tasks
+
+### Mobile Code Block Overflow Fix (Ready to Push)
+**Status**: Committed locally, needs `git push origin main`
+
+**What was done**:
+- Fixed mobile overflow issue on the "Context Windows" blog post (`src/posts/infinite-context-architecture.md`)
+- The long DSL code example was causing horizontal page overflow on mobile, requiring zoom out
+- Updated `src/_includes/post.njk` with CSS fixes:
+  - Added `max-width: 100%` and `box-sizing: border-box` to `.post-content pre`
+  - Added `overflow-x: auto` to code inside pre blocks for horizontal scroll within the block
+  - Added `overflow-x: hidden` to `.post-body` and `.post-content` on mobile
+  - Reduced code block padding on mobile
+
+**To deploy**: Run `git push origin main` from terminal (SSH key required)
+
+**After push**: Cloudflare Pages auto-deploys in ~30 seconds. Verify at https://nullward.pro/essays/context-windows-are-a-solved-problem-the-architecture-nobodys-building/
