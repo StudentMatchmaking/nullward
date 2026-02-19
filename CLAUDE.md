@@ -301,7 +301,7 @@ When asked to post to X, follow these guidelines:
 
 **Tweet Writing Style:**
 - Direct and punchy (match Nullward voice)
-- Use line breaks for readability
+- Use double line breaks (blank lines) between paragraphs so formatting copies correctly to X
 - Include 1-2 relevant hashtags max (#AI, #Tech, #FutureOfWork)
 - Numbers and stats perform well
 - Contrarian takes get engagement
