@@ -4,6 +4,7 @@
 # Allow all crawlers
 User-agent: *
 Allow: /
+Disallow: /thesis/
 
 # AI Crawlers - explicitly allowed for GEO
 User-agent: GPTBot

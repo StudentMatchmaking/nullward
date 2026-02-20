@@ -359,3 +359,34 @@ Track which blog posts have been promoted on X with threads:
 | The Google Dependency | 2026-02-20 |
 | The Automation Debt Bomb | 2026-02-21 |
 | Your Brain Is Obsolete | 2026-02-22 |
+| The 39% Problem | 2026-02-23 |
+| The BPO Extinction Event | 2026-02-24 |
+| The AI Property Crash | 2026-02-25 |
+| The Staffing Collapse | 2026-02-26 |
+
+---
+
+## Private Pages
+
+### AI Economic Thesis (Password Protected)
+- **URL:** https://nullward.pro/thesis/
+- **Password:** `aithesis`
+- **Purpose:** Full research thesis for private sharing with select readers
+- **SEO Status:** Blocked (noindex, nofollow, excluded from sitemap, disallowed in robots.txt)
+- **File:** `src/thesis.html`
+- **Source:** Synced from `~/Documents/ai-economic-thesis/THE_AI_ECONOMIC_TRANSFORMATION_THESIS_FULL.html`
+
+To update the thesis:
+1. Edit the source file in `~/Documents/ai-economic-thesis/`
+2. Copy to nullward: `cp ~/Documents/ai-economic-thesis/THE_AI_ECONOMIC_TRANSFORMATION_THESIS_FULL.html ~/nullward/src/thesis.html`
+3. Re-add password protection code (see src/thesis.html for structure)
+4. Push to GitHub
+
+---
+
+## Style Rules
+
+### Typography
+- **NEVER use em dashes (the long dash character).** Use spaced hyphens ` - ` instead.
+  - Wrong: `This is wrong[em dash]don't do this`
+  - Correct: `This is correct - do this instead`
