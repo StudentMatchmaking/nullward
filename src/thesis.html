@@ -614,6 +614,17 @@
             display: block;
         }
 
+        .password-input.error {
+            border-color: var(--danger);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
         .thesis-content {
             display: none;
         }
@@ -668,6 +679,7 @@ document.addEventListener('DOMContentLoaded', function() {
             content.classList.add('unlocked');
         } else {
             error.classList.add('show');
+            input.classList.add('error');
             input.value = '';
             input.focus();
         }
@@ -682,6 +694,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     input.addEventListener('input', function() {
         error.classList.remove('show');
+        input.classList.remove('error');
     });
 
     // Focus input on load
