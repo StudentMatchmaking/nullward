@@ -647,7 +647,7 @@
 </div>
 
 <script>
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
     const correctPassword = 'aithesis';
     const overlay = document.getElementById('passwordOverlay');
     const input = document.getElementById('passwordInput');
@@ -686,7 +686,7 @@
 
     // Focus input on load
     input.focus();
-})();
+});
 </script>
 
 <!-- Thesis Content (hidden until password entered) -->
